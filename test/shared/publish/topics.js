@@ -47,7 +47,7 @@ adapters.forEach(function(adapterName) {
 
   var pub = null;
   var channel = null;
-  var validateCat = require('../../topics/cat_created');
+  var validateCat = require('../../fixtures/topics/cat_created');
 
   test('shared:publish:topics:ready', function(assert) {
     pub = new adapter.Publish();
