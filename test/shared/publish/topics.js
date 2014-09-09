@@ -50,7 +50,9 @@ adapters.forEach(function(adapterName) {
     assert.ok(pub);
     pub.on('ready', function(err) {
       assert.equal(err, null);
-      channel = pub.channel('cats', validateCat);
+      channel = pub.channel('cats', {
+        schema: validateCat
+      });
       assert.end();
     });
   });

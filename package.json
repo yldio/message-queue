@@ -38,7 +38,8 @@
   "devDependencies": {
     "pre-commit": "0.0.9",
     "tape": "^2.14.0",
-    "joi": "^4.6.2"
+    "joi": "^4.6.2",
+    "split": "^0.3.0"
   },
   "pre-commit": [
     "jshint",
