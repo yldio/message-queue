@@ -30,11 +30,12 @@
   },
   "homepage": "https://github.com/yldio/mqee",
   "dependencies": {
-    "json-stringify-safe": "^5.0.0",
-    "xtend": "^4.0.0",
     "async": "^0.9.0",
     "joi": "^4.6.2",
-    "redis": "^0.12.1"
+    "json-stringify-safe": "^5.0.0",
+    "node-netcat": "^1.4.8",
+    "redis": "^0.12.1",
+    "xtend": "^4.0.0"
   },
   "devDependencies": {
     "pre-commit": "0.0.9",
