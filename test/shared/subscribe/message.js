@@ -73,9 +73,8 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/subscribe/message:pipe', function(assert) {
-    var meow = {woof: true};
     var i = 0;
-    sub.on('message', function () {
+    sub.on('message', function() {
       if (i === 1) {
         assert.pass('got two messages');
         assert.end();
@@ -91,8 +90,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/subscribe/message:pipe_error', function(assert) {
-    var meow = {woof: true};
-    sub.on('error', function (error) {
+    sub.on('error', function(err) {
       assert.equal(err.message, 'invalid json');
       assert.end();
     });
