@@ -2,6 +2,6 @@
 
 var Joi = require('joi');
 
-exports.schema = {
+module.exports = {
   meow : Joi.string().required()
 };

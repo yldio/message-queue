@@ -2,8 +2,8 @@
 
 var Joi = require('joi');
 
-exports.schema = {
+module.exports = {
   when  : Joi.date().required(),
   name  : Joi.string().required(),
-  likes : Joi.object()
+  likes : Joi.array()
 };
