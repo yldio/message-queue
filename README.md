@@ -47,3 +47,4 @@ pub.close();
 sub.close();
 ```
 
+Wanted Adapters For: `couchdb`, `redis`, `basic`, `amqp`, `kafka`, `websockets`

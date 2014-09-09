@@ -1,11 +1,7 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
 var test = require('tape');
-
-var adapters = fs.readdirSync(
-  path.join(__dirname, '..', '..', '..', 'lib', 'adapters'));
+var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
   var adapter = require('../../../lib/mqee')(adapterName);
@@ -49,7 +45,7 @@ adapters.forEach(function(adapterName) {
   var channel = null;
   var validateCat = require('../../fixtures/topics/cat_created');
 
-  test('shared:publish:topics:ready', function(assert) {
+  test('shared/publish/topics:ready', function(assert) {
     pub = new adapter.Publish();
     assert.ok(pub);
     pub.on('ready', function(err) {
@@ -59,7 +55,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared:publish:topics:goodKitten', function(assert) {
+  test('shared/publish/topics:goodKitten', function(assert) {
     channel.write(goodKitten, function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
@@ -68,49 +64,49 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared:publish:topics:badKittenNull', function(assert) {
+  test('shared/publish/topics:badKittenNull', function(assert) {
     channel.write(null, function(err) {
       assert.equal(err.message, 'body is required');
       assert.end();
     });
   });
 
-  test('shared:publish:topics:badKittenEmpty', function(assert) {
+  test('shared/publish/topics:badKittenEmpty', function(assert) {
     channel.write({}, function(err) {
       assert.equal(err.message, 'when fails to match the required pattern');
       assert.end();
     });
   });
 
-  test('shared:publish:topics:badKittenString', function(assert) {
+  test('shared/publish/topics:badKittenString', function(assert) {
     channel.write('meow', function(err) {
       assert.equal(err.message, 'typeof body should be json, is `string`');
       assert.end();
     });
   });
 
-  test('shared:publish:topics:badKittenNoWhen', function(assert) {
+  test('shared/publish/topics:badKittenNoWhen', function(assert) {
     channel.write(badKittenNoWhen, function(err) {
       assert.equal(err.message, 'when fails to match the required pattern');
       assert.end();
     });
   });
 
-  test('shared:publish:topics:badKittenNoName', function(assert) {
+  test('shared/publish/topics:badKittenNoName', function(assert) {
     channel.write(badKittenNoName, function(err) {
       assert.equal(err.message, 'name fails to match the required pattern');
       assert.end();
     });
   });
 
-  test('shared:publish:topics:badKittenNoLikes', function(assert) {
+  test('shared/publish/topics:badKittenNoLikes', function(assert) {
     channel.write(badKittenNoLikes, function(err) {
       assert.equal(err.message, 'likes fails to match the required pattern');
       assert.end();
     });
   });
 
-  test('shared:publish:topics:filteredKitten', function(assert) {
+  test('shared/publish/topics:filteredKitten', function(assert) {
     var newFilteredKitten = {
       when: filteredKitten.when,
       name: filteredKitten.name,

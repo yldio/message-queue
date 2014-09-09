@@ -1,11 +1,7 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
 var test = require('tape');
-
-var adapters = fs.readdirSync(
-  path.join(__dirname, '..', '..', '..', 'lib', 'adapters'));
+var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
   var adapter = require('../../../lib/mqee')(adapterName);
@@ -15,7 +11,7 @@ adapters.forEach(function(adapterName) {
   var pub = null;
   var channel = null;
 
-  test('shared:publish:write:ready', function(assert) {
+  test('shared/publish/write:ready', function(assert) {
     pub = new adapter.Publish();
     assert.ok(pub);
     pub.on('ready', function(err) {
@@ -25,7 +21,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared:publish:write:plaintext', function(assert) {
+  test('shared/publish/write:plaintext', function(assert) {
     channel.write('meow', function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
@@ -35,7 +31,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared:publish:write:json_as_text', function(assert) {
+  test('shared/publish/write:json_as_text', function(assert) {
     channel.write(JSON.stringify(meow), function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
@@ -44,7 +40,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared:publish:write:json', function(assert) {
+  test('shared/publish/write:json', function(assert) {
     channel.write(meow, function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
@@ -53,7 +49,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared:publish:write:circular', function(assert) {
+  test('shared/publish/write:circular', function(assert) {
     var data = {name: 'felix'};
     data.data = data;
     channel.write(data, function(err, info) {
