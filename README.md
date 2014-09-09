@@ -29,9 +29,16 @@ pub.on('ready', function(){});
 pub.on('error', function(){});
 pub.on('end', function(){});
 
-var catsPub = pub.channel('cats');
+//
+// topic is a joi schema used to validate messages
+//
+var catsPub = pub.channel('cats', topic);
 
-catsPub.write('{"message": "ok"}', function (ack) {
+catsPub.write('{"message": "ok"}', function (err) {
+  //
+  // includes `ack` and other errors like validation
+  //
+
   //
   // your callback code here
   //
