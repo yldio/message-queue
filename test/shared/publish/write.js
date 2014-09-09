@@ -9,7 +9,6 @@ var adapters = fs.readdirSync(
 
 adapters.forEach(function(adapterName) {
   var adapter = require('../../../lib/mqee')(adapterName);
-  var defaults = adapter.defaults;
   var meow = {
     'meow':'yisss'
   };
@@ -19,25 +18,25 @@ adapters.forEach(function(adapterName) {
   test('shared:publish:write:ready', function(assert) {
     pub = new adapter.Publish();
     assert.ok(pub);
-    assert.equal(pub.port, defaults.port);
-    assert.equal(pub.host, defaults.host);
-    pub.on('ready', assert.end);
+    pub.on('ready', function(err) {
+      assert.equal(err, null);
+      channel = pub.channel('cats');
+      assert.end();
+    });
   });
 
   test('shared:publish:write:plaintext', function(assert) {
-    channel = pub.channel('cats');
-    channel.write('meow', function (err, info) {
+    channel.write('meow', function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
       assert.equal(typeof info.ts, 'Date');
-      assert.equal(info.validation, null);
       assert.equal(info.written, 'meow');
       assert.end();
     });
   });
 
   test('shared:publish:write:json_as_text', function(assert) {
-    channel.write(JSON.stringify(meow), function (err, info) {
+    channel.write(JSON.stringify(meow), function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
       assert.equal(info.written, JSON.stringify(meow));
@@ -46,7 +45,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared:publish:write:json', function(assert) {
-    channel.write(meow, function (err, info) {
+    channel.write(meow, function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
       assert.deepEqual(info.written, meow);
@@ -57,7 +56,7 @@ adapters.forEach(function(adapterName) {
   test('shared:publish:write:circular', function(assert) {
     var data = {name: 'felix'};
     data.data = data;
-    channel.write(data, function (err, info) {
+    channel.write(data, function(err, info) {
       assert.equal(err, null);
       assert.ok(info.ack);
       assert.deepEqual(info.written, {name: 'felix', data: '[circular]'});
@@ -65,7 +64,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('teardown', function (assert) {
+  test('teardown', function(assert) {
     pub.close(assert.end);
   });
 });
