@@ -64,6 +64,10 @@ adapters.forEach(function(adapterName) {
     });
   });
 
+  //
+  // fixme: add test for on('error')
+  //
+
   test('teardown', function(assert) {
     pub.close(assert.end);
   });

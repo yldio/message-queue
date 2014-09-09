@@ -8,16 +8,19 @@ a standard interface to access message queues
 var mqee = require('mqee')('amqp');
 
 var sub = new mqee.Subscribe({
+  channel: 'cats'
   //
   // adapter specific options
   //
 });
 
-var catsSub = sub.channel('cats');
+sub.on('message', function(jsonObject){
 
-catsSub.on('data', function(){});
-catsSub.on('error', function(){});
-catsSub.on('end', function(){});
+});
+
+sub.on('data', function(){});
+sub.on('error', function(){});
+sub.on('end', function(){});
 
 var pub = new mqee.Publish({
   //
@@ -32,19 +35,15 @@ pub.on('end', function(){});
 //
 // topic is a joi schema used to validate messages
 //
-var catsPub = pub.channel('cats', topic);
+var channel = pub.channel('cats', topic);
 
-catsPub.write('{"message": "ok"}', function (err) {
-  //
-  // includes `ack` and other errors like validation
-  //
-
+channel.write({"message": "ok"}, function (err) {
   //
   // your callback code here
   //
 });
 
 pub.close();
-catsSub.close();
+sub.close();
 ```
 
