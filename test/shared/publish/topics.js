@@ -24,12 +24,10 @@ adapters.forEach(function(adapterName) {
     likes: {}
   };
 
-  var badKittenNoLikes = {
+  var badKittenBadLikes = {
     when: new Date(),
     name: 'Felix',
-    likes: ['food', 'birds', {
-      and: ['other', 'things']
-    }]
+    likes: 'doge'
   };
 
   var filteredKitten = {
@@ -49,7 +47,7 @@ adapters.forEach(function(adapterName) {
     pub = new adapter.Publish();
     assert.ok(pub);
     pub.on('ready', function(err) {
-      assert.equal(err, null);
+      assert.equal(err, undefined);
       channel = pub.channel('cats', {
         schema: validateCat
       });
@@ -58,66 +56,75 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/publish/topics:goodKitten', function(assert) {
-    channel.write(goodKitten, function(err, info) {
-      assert.equal(err, null);
+    channel.publish(goodKitten, function(err, info) {
+      assert.equal(err, undefined);
       assert.ok(info.ack);
-      assert.deepEqual(info.written, goodKitten);
+      goodKitten.when = goodKitten.when.toISOString();
+      assert.deepEqual(JSON.parse(info.written), goodKitten);
       assert.end();
     });
   });
 
   test('shared/publish/topics:badKittenNull', function(assert) {
-    channel.write(null, function(err) {
-      assert.equal(err.message, 'body is required');
+    channel.publish(null, function(err) {
+      assert.equal(err.message, 'value must be an object');
       assert.end();
     });
   });
 
   test('shared/publish/topics:badKittenEmpty', function(assert) {
-    channel.write({}, function(err) {
-      assert.equal(err.message, 'when fails to match the required pattern');
+    channel.publish({}, function(err) {
+      assert.equal(err.message, 'when is required');
+      assert.end();
+    });
+  });
+
+  test('shared/publish/topics:badKittenEmpty', function(assert) {
+    channel.publish({when: 'String'}, function(err) {
+      assert.equal(err.message,
+        'when must be a number of milliseconds or valid date string');
       assert.end();
     });
   });
 
   test('shared/publish/topics:badKittenString', function(assert) {
-    channel.write('meow', function(err) {
-      assert.equal(err.message, 'typeof body should be json, is `string`');
+    channel.publish('meow', function(err) {
+      assert.equal(err.message, 'Expecting object not string');
       assert.end();
     });
   });
 
   test('shared/publish/topics:badKittenNoWhen', function(assert) {
-    channel.write(badKittenNoWhen, function(err) {
-      assert.equal(err.message, 'when fails to match the required pattern');
+    channel.publish(badKittenNoWhen, function(err) {
+      assert.equal(err.message, 'when is required');
       assert.end();
     });
   });
 
   test('shared/publish/topics:badKittenNoName', function(assert) {
-    channel.write(badKittenNoName, function(err) {
-      assert.equal(err.message, 'name fails to match the required pattern');
+    channel.publish(badKittenNoName, function(err) {
+      assert.equal(err.message, 'name is required');
       assert.end();
     });
   });
 
-  test('shared/publish/topics:badKittenNoLikes', function(assert) {
-    channel.write(badKittenNoLikes, function(err) {
-      assert.equal(err.message, 'likes fails to match the required pattern');
+  test('shared/publish/topics:badKittenBadLikes', function(assert) {
+    channel.publish(badKittenBadLikes, function(err) {
+      assert.equal(err.message, 'likes must be an array');
       assert.end();
     });
   });
 
   test('shared/publish/topics:filteredKitten', function(assert) {
     var newFilteredKitten = {
-      when: filteredKitten.when,
+      when: filteredKitten.when.toISOString(),
       name: filteredKitten.name,
       likes: filteredKitten.likes
     };
-    channel.write(filteredKitten, function(err, info) {
-      assert.equal(err, null);
+    channel.publish(filteredKitten, function(err, info) {
+      assert.equal(err, undefined);
       assert.ok(info.ack);
-      assert.deepEqual(info.written, newFilteredKitten);
+      assert.deepEqual(JSON.parse(info.written), newFilteredKitten);
       assert.end();
     });
   });

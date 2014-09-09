@@ -36,6 +36,8 @@
     "node-netcat": "^1.4.8",
     "redis": "^0.12.1",
     "xtend": "^4.0.0"
+    "verror": "^1.4.0",
+    "debug": "^2.0.0"
   },
   "devDependencies": {
     "pre-commit": "0.0.9",
