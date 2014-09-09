@@ -13,11 +13,11 @@ var sub = new mqee.Subscribe({
   //
 });
 
-var follow = sub.channel('cats');
+var catsSub = sub.channel('cats');
 
-follow.on('data', function(){});
-follow.on('error', function(){});
-follow.on('end', function(){});
+catsSub.on('data', function(){});
+catsSub.on('error', function(){});
+catsSub.on('end', function(){});
 
 var pub = new mqee.Publish({
   //
@@ -29,15 +29,15 @@ pub.on('ready', function(){});
 pub.on('error', function(){});
 pub.on('end', function(){});
 
-var channel = pub.channel('some channel');
+var catsPub = pub.channel('cats');
 
-channel.write('{"message": "ok"}', function (ack) {
+catsPub.write('{"message": "ok"}', function (ack) {
   //
   // your callback code here
   //
 });
 
 pub.close();
-follow.close();
+catsSub.close();
 ```
 
