@@ -34,6 +34,6 @@
     "xtend": "^4.0.0",
     "async": "^0.9.0",
     "joi": "^4.6.2",
-    "amqplib": "^0.2.1"
+    "node-amqp-wrapper": "^2.0.0"
   }
 }
