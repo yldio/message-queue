@@ -10,7 +10,7 @@ helpers.timeout = 200;
 helpers.adapters = fs.readdirSync(
   path.join(__dirname, '..', '..', 'lib', 'adapters'));
 
-if(process.env.ADAPTERS) {
+if (process.env.ADAPTERS) {
   var adapters = process.env.ADAPTERS.trim().split(',');
   debug('adapters: ' + adapters.join(', '));
   debug('defaults: ' + helpers.adapters.join(', '));
