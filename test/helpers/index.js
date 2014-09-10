@@ -6,5 +6,6 @@ var path = require('path');
 var helpers = exports;
 
 helpers.timeout = 200;
-helpers.adapters = fs.readdirSync(
-  path.join(__dirname, '..', '..', 'lib', 'adapters'));
+helpers.adapters = process.env.ADAPTER ?
+  [process.env.ADAPTER] :
+  fs.readdirSync(path.join(__dirname, '..', '..', 'lib', 'adapters'));
