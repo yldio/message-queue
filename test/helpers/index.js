@@ -10,7 +10,7 @@ helpers.adapters = process.env.ADAPTER ?
   [process.env.ADAPTER] :
   fs.readdirSync(path.join(__dirname, '..', '..', 'lib', 'adapters'));
 
-helpers.readFixture = function (filepath) {
+helpers.readFixture = function(filepath) {
   var ext = path.extname(filepath);
 
   function readFile(filepath) {
