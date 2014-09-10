@@ -4,7 +4,7 @@
   "description": "produce and consume message queues",
   "main": "lib/mqee.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/tape/bin/tape ./test/lib/*.js ./test/*/publish/*.js && istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100",
+    "test": "istanbul cover ./node_modules/tape/bin/tape ./test/lib/*.js ./test/*/*/*.js && istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100",
     "jshint": "jshint -c .jshintrc --exclude-path .gitignore .",
     "codestyle": "jscs -p google lib/ test/",
     "coverage": "open coverage/lcov-report/index.html"

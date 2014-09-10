@@ -16,7 +16,7 @@ module.exports = {
     };
   },
   whenReady: function() {
-    return function (f) {
+    return function(f) {
       return process.nextTick(f);
     };
   },
