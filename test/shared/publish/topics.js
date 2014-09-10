@@ -1,47 +1,21 @@
 'use strict';
 
 var test = require('tape');
-var adapters = require('../../helpers').adapters;
+var helpers = require('../../helpers');
+var adapters = helpers.adapters;
 
 adapters.forEach(function(adapterName) {
   var adapter = require('../../../lib/mqee')(adapterName);
 
-  var goodKitten = {
-    when: new Date(),
-    name: 'Felix',
-    likes: ['food', 'birds', {
-      and: ['other', 'things']
-    }]
-  };
-
-  var badKittenNoWhen = {
-    name: 'Amelie',
-    likes: {}
-  };
-
-  var badKittenNoName = {
-    when: new Date(),
-    likes: {}
-  };
-
-  var badKittenBadLikes = {
-    when: new Date(),
-    name: 'Felix',
-    likes: 'doge'
-  };
-
-  var filteredKitten = {
-    when: new Date(),
-    name: 'Felix',
-    ownsHouse: true,
-    likes: ['food', 'birds', {
-      and: ['other', 'things']
-    }]
-  };
+  var goodKitten        = helpers.readFixture('cats/good.json');
+  var badKittenNoWhen   = helpers.readFixture('cats/amelie.json');
+  var badKittenNoName   = helpers.readFixture('cats/noname.json');
+  var badKittenBadLikes = helpers.readFixture('cats/felix.json');
+  var filteredKitten    = helpers.readFixture('cats/doug.json');
+  var topic             = helpers.readFixture('topics/cat_created.js');
 
   var pub = null;
   var channel = null;
-  var validateCat = require('../../fixtures/topics/cat_created');
 
   test('shared/publish/topics:ready', function(assert) {
     pub = new adapter.Publish();
@@ -49,7 +23,7 @@ adapters.forEach(function(adapterName) {
     pub.on('ready', function(err) {
       assert.equal(err, undefined);
       channel = pub.channel('cats', {
-        schema: validateCat
+        schema: topic
       });
       assert.end();
     });
@@ -59,6 +33,15 @@ adapters.forEach(function(adapterName) {
     channel.publish(goodKitten, function(err, info) {
       assert.equal(err, undefined);
       assert.ok(info.ack);
+      assert.deepEqual(JSON.parse(info.written), goodKitten);
+      assert.end();
+    });
+  });
+
+  test('shared/publish/topics:goodKitten_with_date', function(assert) {
+    goodKitten.when = new Date();
+    channel.publish(goodKitten, function(err, info) {
+      assert.equal(err, undefined);
       goodKitten.when = goodKitten.when.toISOString();
       assert.deepEqual(JSON.parse(info.written), goodKitten);
       assert.end();
@@ -117,7 +100,7 @@ adapters.forEach(function(adapterName) {
 
   test('shared/publish/topics:filteredKitten', function(assert) {
     var newFilteredKitten = {
-      when: filteredKitten.when.toISOString(),
+      when: filteredKitten.when,
       name: filteredKitten.name,
       likes: filteredKitten.likes
     };
