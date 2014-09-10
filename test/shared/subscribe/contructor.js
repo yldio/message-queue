@@ -8,7 +8,7 @@ adapters.forEach(function(adapterName) {
   var sub = null;
 
   test('shared/subscribe/constructor:with_name', function(assert) {
-    sub = new adapter.Subscriber({
+    sub = new adapter.Subscribe({
       channel: 'cats'
     });
     assert.ok(sub);
@@ -17,19 +17,25 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/subscribe/constructor:empty', function(assert) {
-    assert.throws(new adapter.Subscriber(), 'channel is required');
+    assert.throws(function () {
+      new adapter.Subscribe();
+    }, /channel is required/);
     assert.end();
   });
 
   test('shared/subscribe/constructor:empty_object', function(assert) {
-    assert.throws(new adapter.Subscriber({}), 'channel is required');
+    assert.throws(function () {
+      new adapter.Subscribe({});
+    }, /channel is required/);
     assert.end();
   });
 
   test('shared/subscribe/constructor:null_channel', function(assert) {
-    assert.throws(new adapter.Subscriber({
-      channel: null
-    }), 'channel is required');
+    assert.throws(function () {
+      new adapter.Subscribe({
+        channel: null
+      });
+    }, /channel is required/);
     assert.end();
   });
 
