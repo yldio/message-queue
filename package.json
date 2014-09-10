@@ -4,9 +4,10 @@
   "description": "produce and consume message queues",
   "main": "lib/mqee.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/tape/bin/tape ./test/*/*/*.js",
+    "test": "istanbul cover ./node_modules/tape/bin/tape ./test/lib/*.js ./test/*/publish/*.js && istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100",
     "jshint": "jshint -c .jshintrc --exclude-path .gitignore .",
-    "codestyle": "jscs -p google lib/ test/"
+    "codestyle": "jscs -p google lib/ test/",
+    "coverage": "open coverage/lcov-report/index.html"
   },
   "repository": {
     "type": "git",
@@ -43,7 +44,8 @@
     "pre-commit": "0.0.9",
     "tape": "^2.14.0",
     "joi": "^4.6.2",
-    "split": "^0.3.0"
+    "split": "^0.3.0",
+    "underscore": "^1.7.0"
   },
   "pre-commit": [
     "jshint",
