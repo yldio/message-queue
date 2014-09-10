@@ -17,19 +17,19 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/subscribe/constructor:empty', function(assert) {
-    assert.throws(new adapter.Subscriber(), 'Channel name not specified');
+    assert.throws(new adapter.Subscriber(), 'channel is required');
     assert.end();
   });
 
   test('shared/subscribe/constructor:empty_object', function(assert) {
-    assert.throws(new adapter.Subscriber({}), 'Channel name not specified');
+    assert.throws(new adapter.Subscriber({}), 'channel is required');
     assert.end();
   });
 
   test('shared/subscribe/constructor:null_channel', function(assert) {
     assert.throws(new adapter.Subscriber({
       channel: null
-    }), 'Channel name not specified');
+    }), 'channel is required');
     assert.end();
   });
 
