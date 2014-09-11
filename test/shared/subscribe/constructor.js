@@ -16,25 +16,31 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/subscribe/constructor:empty', function(assert) {
-    assert.throws(function () {
+    assert.throws(function() {
       new adapter.Subscribe();
     }, /channel is required/);
     assert.end();
   });
 
   test('shared/subscribe/constructor:empty_object', function(assert) {
-    assert.throws(function () {
+    assert.throws(function() {
       new adapter.Subscribe({});
     }, /channel is required/);
     assert.end();
   });
 
   test('shared/subscribe/constructor:null_channel', function(assert) {
-    assert.throws(function () {
+    assert.throws(function() {
       new adapter.Subscribe({
         channel: null
       });
     }, /channel is required/);
+    //
+    // fixme: there's no test for if this throws
+    //        and we emit.close before emitter.closed
+    //        is defined. couldnt find a good way of
+    //        writing that test
+    //
     assert.end();
   });
 

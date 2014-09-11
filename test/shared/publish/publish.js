@@ -65,7 +65,6 @@ adapters.forEach(function(adapterName) {
 
   test('shared/publish/publish:close_pub', function(assert) {
     assert.pass('should be able to close connection');
-    debugger
     pub.close(assert.end);
   });
 
