@@ -22,10 +22,9 @@ adapters.forEach(function(adapterName) {
     pub = new adapter.Publish();
     assert.ok(pub);
     pub.on('ready', function(err) {
-      assert.equal(err, null);
+      assert.equal(err, undefined);
       channel = pub.channel('cats', {
-        schema: validateMeow,
-        format: 'json'
+        schema: validateMeow
       });
       dogs = pub.channel('dogs');
       assert.end();
@@ -33,7 +32,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/subscribe/message:newSub', function(assert) {
-    sub = new adapter.Subscriber({
+    sub = new adapter.Subscribe({
       channel: 'cats'
     });
     assert.ok(sub);
@@ -42,21 +41,21 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shared/subscribe/message:meow', function(assert) {
-    var meow = {meow: true};
+    var meow = {meow: 'wow'};
     sub.on('message', function(data) {
       assert.deepEqual(data, meow);
       assert.end();
     });
-    channel.write(meow, function(err, info) {
-      assert.equal(err, null);
-      assert.deepEqual(info.written, meow);
+    channel.publish(meow, function(err, info) {
+      assert.equal(err, undefined);
+      assert.deepEqual(JSON.parse(info.written), meow);
     });
   });
 
   test('shared/subscribe/message:write_to_wrong_channel', function(assert) {
     var bark = {bark: true};
     sub.on('message', assert.fail);
-    bark.write(bark, function(err, info) {
+    bark.publish(bark, function(err, info) {
       assert.equal(err, null);
       assert.deepEqual(info.written, bark);
       setTimeout(assert.end, timeout);
@@ -66,7 +65,7 @@ adapters.forEach(function(adapterName) {
   test('shared/subscribe/message:bad_schema', function(assert) {
     var meow = {woof: true};
     sub.on('message', assert.fail);
-    channel.write(meow, function(err) {
+    channel.publish(meow, function(err) {
       assert.equal(err.message, 'meow fails to match the required pattern');
       setTimeout(assert.end, timeout);
     });

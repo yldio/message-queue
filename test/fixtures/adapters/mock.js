@@ -6,23 +6,46 @@ module.exports = {
     port: 1414,
     host: 'localhost'
   },
-  createClient: function(opts) {
-    var cli = opts;
-    return cli;
+  publish: {
+    createClient: function(opts) {
+      var cli = opts;
+      return cli;
+    },
+    destroyClient: function() {
+      return function(f) {
+        f();
+      };
+    },
+    onReady: function() {
+      return function(f) {
+        return process.nextTick(f);
+      };
+    },
+    publish: function() {
+      return function(name, chunk, enc, f) {
+        f();
+      };
+    }
   },
-  destroyClient: function() {
-    return function(f) {
-      f();
-    };
-  },
-  whenReady: function() {
-    return function(f) {
-      return process.nextTick(f);
-    };
-  },
-  publish: function() {
-    return function(name, chunk, enc, f) {
-      f();
-    };
+  subscribe: {
+    createClient: function(opts) {
+      var cli = opts;
+      return cli;
+    },
+    destroyClient: function() {
+      return function(f) {
+        f();
+      };
+    },
+    onReady: function() {
+      return function(f) {
+        return process.nextTick(f);
+      };
+    },
+    subscribe: function() {
+      return function(name, chunk, enc, f) {
+        f();
+      };
+    }
   }
 };

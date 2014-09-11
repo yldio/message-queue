@@ -2,6 +2,7 @@
 
 var test = require('tape');
 var _ = require('underscore');
+var debug = require('debug')('test/lib/publish');
 var helpers = require('../helpers');
 
 var publishFactory = require('../../lib/publish');
@@ -79,33 +80,49 @@ test('lib/publish/bad_defaults_host', function(assert) {
 var reduceOpts = [
   'createClient',
   'destroyClient',
-  'whenReady',
-  'publish'
-].reduce(function(ac, method) {
+  'onReady',
+  'publish',
+  'createClient',
+  'destroyClient',
+  'onReady',
+  'subscribe'
+].reduce(function(ac, method, i, l) {
+  debug(ac);
+  var what = (i+1 > l.length/2) ? 'subscribe' : 'publish';
   var opts = _.clone(ac);
-  test('lib/publish/no_' + method, function(assert) {
+  var pubOpts = _.clone(ac.publish);
+  var subOpts = _.clone(ac.subscribe);
+  opts.publish = pubOpts;
+  opts.subscribe = subOpts;
+
+  test('lib/publish/no_' + method + '_' + what, function(assert) {
     assert.throws(function() {
       publishFactory(opts);
     }, new RegExp(method + ' is required'));
     assert.end();
   });
 
-  test('lib/publish/bad_' + method, function(assert) {
+  test('lib/publish/bad_' + method + '_' + what, function(assert) {
     assert.throws(function() {
-      opts[method] = false;
+      opts[what][method] = false;
       publishFactory(opts);
     }, new RegExp(method + ' must be a Function'));
     assert.end();
   });
 
-  ac[method] = function() {};
+  ac[what][method] = function() {};
+
+  debug(ac);
+
   return ac;
 }, {
   name: 'foo',
   defaults: {
     port: 1313,
     host: 'local'
-  }
+  },
+  publish: {},
+  subscribe: {}
 });
 
 test('lib/publish/factory', function(assert) {
@@ -126,7 +143,7 @@ test('lib/publish/instance:does_not_throw', function(assert) {
 });
 
 test('lib/publish/publish:fails', function(assert) {
-  mockPublisher.publish = function(cli) {
+  mockPublisher.publish.publish = function(cli) {
     return function(name, chunk, enc, cb) {
       cli.onError(new Error('This happened'));
       cb();
@@ -141,8 +158,8 @@ test('lib/publish/publish:fails', function(assert) {
   });
 });
 
-test('lib/publish/whenReady:fails', function(assert) {
-  mockPublisher.whenReady = function() {
+test('lib/publish/onReady:fails', function(assert) {
+  mockPublisher.publish.onReady = function() {
     return function(cb) {
       cb(new Error('This is a mock'));
     };

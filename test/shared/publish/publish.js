@@ -17,7 +17,7 @@ adapters.forEach(function(adapterName) {
     pub.on('ready', function(err) {
       assert.equal(err, undefined);
       channel = pub.channel('cats');
-      pub.close(assert.end);
+      assert.end();
     });
   });
 
@@ -59,6 +59,19 @@ adapters.forEach(function(adapterName) {
       assert.equal(
         info.written,
         JSON.stringify({name: 'felix', data: '[Circular ~]'}));
+      assert.end();
+    });
+  });
+
+  test('shared/publish/publish:close_pub', function(assert) {
+    assert.pass('should be able to close connection');
+    debugger
+    pub.close(assert.end);
+  });
+
+  test('shared/publish/publish:cant_publish_to_closed', function(assert) {
+    channel.publish(meow, function(err) {
+      assert.equal(err.message, 'Connection closed');
       assert.end();
     });
   });
