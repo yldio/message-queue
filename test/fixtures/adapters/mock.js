@@ -16,6 +16,9 @@ module.exports = {
         f();
       };
     },
+    prepareChannels: function() {
+      return function (cb) { cb(); };
+    },
     onReady: function() {
       return function(f) {
         return process.nextTick(f);

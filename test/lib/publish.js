@@ -81,14 +81,14 @@ var reduceOpts = [
   'createClient',
   'destroyClient',
   'onReady',
+  'prepareChannels',
   'publish',
   'createClient',
   'destroyClient',
   'onReady',
   'subscribe'
 ].reduce(function(ac, method, i, l) {
-  debug(ac);
-  var what = ((i + 1) > (l.length / 2)) ? 'subscribe' : 'publish';
+  var what = ((i + 1) > Math.ceil(l.length / 2)) ? 'subscribe' : 'publish';
   var opts = _.clone(ac);
   var pubOpts = _.clone(ac.publish);
   var subOpts = _.clone(ac.subscribe);
