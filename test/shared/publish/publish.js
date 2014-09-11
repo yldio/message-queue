@@ -1,18 +1,27 @@
 'use strict';
 
-var test = require('tape');
-var adapters = require('../../helpers').adapters;
+var helpers = require('../../helpers');
+var adapters = helpers.adapters;
+
+var defAdapterOpts = {
+  amqp: {
+    channels: ['cats']
+  }
+};
 
 adapters.forEach(function(adapterName) {
+  var test = helpers.testFor(adapterName);
   var adapter = require('../../../lib/mqee')(adapterName);
+  var opts = defAdapterOpts[adapterName];
   var meow = {
     'meow':'yisss'
   };
+
   var pub = null;
   var channel = null;
 
   test('shared/publish/publish:ready', function(assert) {
-    pub = new adapter.Publish();
+    pub = new adapter.Publish(opts);
     assert.ok(pub);
     pub.on('ready', function(err) {
       assert.equal(err, undefined);
@@ -65,10 +74,15 @@ adapters.forEach(function(adapterName) {
 
   test('shared/publish/publish:close_pub', function(assert) {
     assert.pass('should be able to close connection');
-    pub.close(assert.end);
+    pub.close(function (a,b,c,d) {
+      debugger
+      //assert.end()
+    });
   });
 
   test('shared/publish/publish:cant_publish_to_closed', function(assert) {
+        debugger
+
     channel.publish(meow, function(err) {
       assert.equal(err.message, 'Connection closed');
       assert.end();

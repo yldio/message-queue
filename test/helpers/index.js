@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var test = require('tape');
 var debug = require('debug')('test/helpers');
 
 var helpers = exports;
@@ -16,6 +17,12 @@ if (process.env.ADAPTERS) {
   debug('defaults: ' + helpers.adapters.join(', '));
   helpers.adapters = adapters;
 }
+
+helpers.testFor = function(adapterName) {
+  return function (name, cb) {
+    test(adapterName + ' ' + name, cb);
+  };
+};
 
 helpers.readFixture = function(filepath) {
   var ext = path.extname(filepath);
