@@ -3,7 +3,6 @@
 var test = require('tape');
 var fs = require('fs');
 var path = require('path');
-var split = require('split');
 var helpers = require('../../helpers');
 var adapters = helpers.adapters;
 var timeout = helpers.timeout;
@@ -35,15 +34,32 @@ adapters.forEach(function(adapterName) {
     sub = new adapter.Subscribe({
       channel: 'cats'
     });
-    assert.ok(sub);
-    assert.equal(sub.channel, 'cats');
-    assert.end();
+    sub.on('ready', function() {
+      assert.ok(sub);
+      assert.equal(sub.channel, 'cats');
+      assert.end();
+    });
   });
 
-  test('shared/subscribe/message:meow', function(assert) {
+  test('shared/subscribe/message:meow_string', function(assert) {
     var meow = {meow: 'wow'};
-    sub.on('message', function(data) {
+    sub.once('message', function(data) {
+      assert.notDeepEqual(data, meow);
+      assert.deepEqual(typeof data, 'string');
+      assert.end();
+    });
+    channel.publish(meow, function(err, info) {
+      assert.equal(err, undefined);
+      assert.deepEqual(JSON.parse(info.written), meow);
+    });
+  });
+
+  test('shared/subscribe/message:meow_json', function(assert) {
+    var meow = {meow: 'wow'};
+    sub.once('message', function(data) {
+      data = this.toJSON(data);
       assert.deepEqual(data, meow);
+      assert.deepEqual(typeof data, 'object');
       assert.end();
     });
     channel.publish(meow, function(err, info) {
@@ -54,19 +70,19 @@ adapters.forEach(function(adapterName) {
 
   test('shared/subscribe/message:write_to_wrong_channel', function(assert) {
     var bark = {bark: true};
-    sub.on('message', assert.fail);
-    bark.publish(bark, function(err, info) {
-      assert.equal(err, null);
-      assert.deepEqual(info.written, bark);
+    sub.once('message', assert.fail);
+    dogs.publish(bark, function(err, info) {
+      assert.equal(err, undefined);
+      assert.deepEqual(JSON.parse(info.written), bark);
       setTimeout(assert.end, timeout);
     });
   });
 
   test('shared/subscribe/message:bad_schema', function(assert) {
     var meow = {woof: true};
-    sub.on('message', assert.fail);
+    sub.once('message', assert.fail);
     channel.publish(meow, function(err) {
-      assert.equal(err.message, 'meow fails to match the required pattern');
+      assert.equal(err.message, 'meow is required');
       setTimeout(assert.end, timeout);
     });
   });
@@ -80,25 +96,23 @@ adapters.forEach(function(adapterName) {
       }
       i++;
     });
-    sub.on('error', assert.fail);
-    fs.createReadStream(
-        path.join(__dirname, '../../fixtures/files/stream.txt'))
-      .pipe(split())
+    sub.once('error', assert.fail);
+    fs.createReadStream(path.join(__dirname, '../../fixtures/files/stream.txt'))
       .pipe(channel);
-    setTimeout(assert.fail, timeout);
+    //setTimeout(assert.fail, timeout);
   });
 
-  test('shared/subscribe/message:pipe_error', function(assert) {
-    sub.on('error', function(err) {
-      assert.equal(err.message, 'invalid json');
-      assert.end();
-    });
-    sub.on('message', assert.fail);
-    fs.createReadStream(
-        path.join(__dirname, '../../fixtures/files/stream.txt'))
-      .pipe(channel);
-    setTimeout(assert.fail, timeout);
-  });
+  //test('shared/subscribe/message:pipe_error', function(assert) {
+  //  sub.once('error', function(err) {
+  //    assert.equal(err.message, 'invalid json');
+  //    assert.end();
+  //  });
+  //  sub.once('message', assert.fail);
+  //  fs.createReadStream(
+  //      path.join(__dirname, '../../fixtures/files/stream.txt'))
+  //    .pipe(channel);
+  //  setTimeout(assert.fail, timeout);
+  //});
 
   test('teardown', function(assert) {
     pub.close(assert.end);

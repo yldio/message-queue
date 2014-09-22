@@ -74,14 +74,14 @@ adapters.forEach(function(adapterName) {
 
   test('shared/publish/publish:close_pub', function(assert) {
     assert.pass('should be able to close connection');
-    pub.close(function (a,b,c,d) {
+    pub.close(function(a,b,c,d) {
       debugger
-      //assert.end()
+      assert.end();
     });
   });
 
   test('shared/publish/publish:cant_publish_to_closed', function(assert) {
-        debugger
+    debugger
 
     channel.publish(meow, function(err) {
       assert.equal(err.message, 'Connection closed');
