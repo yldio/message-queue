@@ -89,12 +89,13 @@ adapters.forEach(function(adapterName) {
 
   test('shared/subscribe/message:pipe', function(assert) {
     var i = 0;
-    sub.on('message', function() {
+    sub.on('message', function(data) {
       if (i === 1) {
         assert.pass('got two messages');
         assert.end();
       }
       i++;
+      debugger
     });
     sub.once('error', assert.fail);
     fs.createReadStream(path.join(__dirname, '../../fixtures/files/stream.txt'))
