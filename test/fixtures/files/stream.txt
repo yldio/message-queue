@@ -1,6 +1,2 @@
-{
-  "meow": "yissssss"
-}
-{
-  "meow": "nah"
-}
+{ "meow": "yissssss" }
+{ "meow": "nah" }
