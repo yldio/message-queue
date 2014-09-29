@@ -50,7 +50,7 @@ adapters.forEach(function(adapterName) {
 
   test('shared/publish/topics:badKittenNull', function(assert) {
     channel.publish(null, function(err) {
-      assert.equal(err.message, 'value must be an object');
+      assert.equal(err.message, 'Expecting object not null');
       assert.end();
     });
   });

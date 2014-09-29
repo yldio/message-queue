@@ -54,6 +54,7 @@ adapters.forEach(function(adapterName) {
     channel.publish(meow, function(err, info) {
       assert.equal(err, undefined);
       assert.ok(info.ack);
+      debugger
       assert.deepEqual(JSON.parse(info.written), meow);
       assert.end();
     });
@@ -65,6 +66,7 @@ adapters.forEach(function(adapterName) {
     channel.publish(data, function(err, info) {
       assert.equal(err, undefined);
       assert.ok(info.ack);
+      debugger
       assert.equal(
         info.written,
         JSON.stringify({name: 'felix', data: '[Circular ~]'}));

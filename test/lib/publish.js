@@ -144,7 +144,7 @@ test('lib/publish/instance:does_not_throw', function(assert) {
 
 test('lib/publish/publish:fails', function(assert) {
   mockPublisher.publish.publish = function(cli) {
-    return function(name, chunk, enc, cb) {
+    return function(name, chunk, cb) {
       cli.onError(new Error('This happened'));
       cb();
     };
@@ -152,7 +152,7 @@ test('lib/publish/publish:fails', function(assert) {
 
   var pubPub = new publishFactory(mockPublisher)();
 
-  pubPub.publish('queue', 'hey', 'utf-8', assert.end);
+  pubPub.publish('queue', 'hey', assert.end);
   pubPub.on('error', function(err) {
     assert.equal(err.message, 'This happened');
   });
