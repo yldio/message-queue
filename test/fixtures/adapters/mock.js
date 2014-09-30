@@ -17,7 +17,7 @@ module.exports = {
       };
     },
     prepareChannels: function() {
-      return function (cb) { cb(); };
+      return function(f) { process.nextTick(f); };
     },
     onReady: function() {
       return function(f) {
@@ -46,9 +46,7 @@ module.exports = {
       };
     },
     subscribe: function() {
-      return function(name, chunk, enc, f) {
-        f();
-      };
+      return function() { return; };
     }
   }
 };
