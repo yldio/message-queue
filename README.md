@@ -3,46 +3,114 @@
 a standard interface to access message queues
 
 ``` javascript
-var mqee = require('mqee')('amqp');
+var Joi = require('joi');
+var mqee = require('mqee');
 
-var sub = new mqee.Subscribe({
-  channel: 'cats'
+//
+// { [Function]
+//   version: '0.0.0',
+//   path: '/Users/dscape/Desktop/dev/yldio/tc/mqee/lib',
+//   adapters: [ 'redis', 'amqp' ]
+// }
+//
+
+var queue = mqee('redis');
+
+//
+// { Publish:
+//   { [Function: Publish]
+//     defaults: { port: '6379', host: 'localhost' } },
+//  Subscribe:
+//   { [Function: Subscribe]
+//     defaults: { port: '6379', host: 'localhost' } } }
+//
+
+console.log(rabbit.Publish.defaults);
+
+//
+// { port: '6379', host: 'localhost' }
+//
+
+var cats = new queue.Subscribe({
+  //
+  // subscribe to the `cats` channel
+  //
+  channel: 'cats',
+  //
+  // expect all messages to be json
+  // defaults to true, set to false for plaintext
+  //
+  json: true
   //
   // adapter specific options
   //
 });
 
-sub.on('message', function(jsonObject){
+//
+// { domain: null,
+//   _maxListeners: 10,
+//   channel: 'cats',
+//   port: 6379,
+//   host: 'localhost',
+//   meta:
+//    { port: '6379',
+//      host: 'localhost',
+//      channel: 'cats',
+//      socket_nodelay: true,
+//      socket_keepalive: true },
+//   json: true,
+//   cli: [Object],
+//   closed: true,
+//   _close: [Function],
+//   close: [Function] }
+//
 
+cats.on('message', function(coolCat){
+  //
+  // you got a message
+  //
+  console.log(coolCat);
 });
 
-sub.on('data', function(){});
-sub.on('error', function(){});
-sub.on('end', function(){});
+cats.on('error', function(err) {
+  console.log(err);
+  //
+  // close the subscriber on error
+  //
+  cats.close();
+});
 
-var pub = new mqee.Publish({
+cats.on('end',   function() {
+  //
+  // close the publisher when i close
+  // the subscriber
+  //
+  pub.close();
+});
+
+var pub = new queue.Publish({
   //
   // adapter specific options
   //
 });
 
-pub.on('ready', function(){});
+pub.on('ready', function(){
+  //
+  // topic is a joi schema used to validate messages
+  //
+  var topic = {
+    meow : Joi.string().required()
+  };
+
+  var channel = pub.channel('cats', topic);
+
+  channel.publish({meow: 'yay'});
+  channel.publish({woof: 'problem officer'});
+});
+
+//
+// publisher events to listen to
+//
 pub.on('error', function(){});
-pub.on('end', function(){});
-
-//
-// topic is a joi schema used to validate messages
-//
-var channel = pub.channel('cats', topic);
-
-channel.write({"message": "ok"}, function (err) {
-  //
-  // your callback code here
-  //
-});
-
-pub.close();
-sub.close();
+pub.on('end',   function(){});
 ```
-
-Wanted Adapters For: `couchdb`, `redis`, `amqp` (e.g. rabbitmq), `kafka`, `websockets`
