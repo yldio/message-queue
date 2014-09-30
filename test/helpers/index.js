@@ -12,7 +12,7 @@ helpers.adapters = fs.readdirSync(
   path.join(__dirname, '..', '..', 'lib', 'adapters'));
 
 // JS
-helpers.adapters.splice(helpers.adapters.indexOf('amqp'), 1)
+helpers.adapters.splice(helpers.adapters.indexOf('amqp'), 1);
 
 if (process.env.ADAPTERS) {
   var adapters = process.env.ADAPTERS.trim().split(',');
@@ -21,9 +21,10 @@ if (process.env.ADAPTERS) {
   helpers.adapters = adapters;
 }
 
-helpers.testFor = function(adapterName) {
-  return function (name, cb) {
-    test(adapterName + ' ' + name, cb);
+helpers.testFor = function(adapterName, path) {
+  path.unshift('test');
+  return function(desc, cb) {
+    test(path.join('/') + '<' + adapterName + '> ' + desc, cb);
   };
 };
 

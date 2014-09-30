@@ -1,12 +1,15 @@
 'use strict';
 
-var test = require('tape');
+var helpers = require('../../helpers');
 var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
+  var test = helpers.testFor(adapterName,
+    ['shared', 'subscribe', 'constructor']);
+
   var adapter = require('../../../lib/mqee')(adapterName);
 
-  test('shared/subscribe/constructor:with_name', function(assert) {
+  test('should create a subscriber for the channel', function(assert) {
     var sub = new adapter.Subscribe({
       channel: 'cats'
     });
@@ -15,28 +18,28 @@ adapters.forEach(function(adapterName) {
     sub.close(assert.end);
   });
 
-  test('shared/subscribe/constructor:empty', function(assert) {
+  test('should require a channel name', function(assert) {
     assert.throws(function() {
       new adapter.Subscribe();
     }, /channel is required/);
     assert.end();
   });
 
-  test('shared/subscribe/constructor:empty_object', function(assert) {
+  test('should not allow empty object', function(assert) {
     assert.throws(function() {
       new adapter.Subscribe({});
     }, /channel is required/);
     assert.end();
   });
 
-  test('shared/subscribe/constructor:null_channel', function(assert) {
+  test('should not allow a `null` channel', function(assert) {
     assert.throws(function() {
       new adapter.Subscribe({
         channel: null
       });
     }, /channel is required/);
     //
-    // fixme: there's no test for if this throws
+    // @fixme there's no test for if this throws
     //        and we emit.close before emitter.closed
     //        is defined. couldnt find a good way of
     //        writing that test

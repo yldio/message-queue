@@ -4,7 +4,7 @@ var helpers = require('../../helpers');
 var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName);
+  var test = helpers.testFor(adapterName, ['shared', 'publish', 'constructor']);
   var adapter = require('../../../lib/mqee')(adapterName);
   var defaults = adapter.Publish.defaults;
   var pub = null;
@@ -13,14 +13,14 @@ adapters.forEach(function(adapterName) {
     console.error(err);
   }
 
-  test('shared/publish/constructor:defaults', function(assert) {
+  test('defaults should include host and port', function(assert) {
     assert.equal(typeof defaults, 'object');
     assert.ok(defaults.host);
     assert.ok(defaults.port);
     assert.end();
   });
 
-  test('shared/publish/constructor:specifies_port', function(assert) {
+  test('assumes default host and allow specifying port', function(assert) {
     pub = new adapter.Publish({port: 1717});
     pub.on('error', onError);
     assert.ok(pub);
@@ -29,7 +29,7 @@ adapters.forEach(function(adapterName) {
     pub.close(assert.end);
   });
 
-  test('shared/publish/constructor:specifies_host', function(assert) {
+  test('assumes default port and allows specifying host', function(assert) {
     pub = new adapter.Publish({host: 'lhost'});
     pub.on('error', onError);
     assert.equal(pub.port, +defaults.port);
@@ -37,7 +37,7 @@ adapters.forEach(function(adapterName) {
     pub.close(assert.end);
   });
 
-  test('shared/publish/constructor:specifies_host_and_port', function(assert) {
+  test('allows specifying both host and port', function(assert) {
     pub = new adapter.Publish({host: 'rhost', port: 5656});
     pub.on('error', onError);
     assert.equal(pub.port, 5656);
@@ -45,7 +45,7 @@ adapters.forEach(function(adapterName) {
     pub.close(assert.end);
   });
 
-  test('shared/publish/constructor:string_port', function(assert) {
+  test('can cast a string as port', function(assert) {
     pub = new adapter.Publish({port: '1717'});
     pub.on('error', onError);
     assert.equal(pub.port, 1717);
@@ -53,7 +53,7 @@ adapters.forEach(function(adapterName) {
     pub.close(assert.end);
   });
 
-  test('shared/publish/constructor:empty_constructor', function(assert) {
+  test('empty constructor uses defaults', function(assert) {
     pub = new adapter.Publish();
     pub.on('error', onError);
     assert.equal(pub.port, +defaults.port);
@@ -61,7 +61,7 @@ adapters.forEach(function(adapterName) {
     pub.close(assert.end);
   });
 
-  test('shared/publish/constructor:other_properties', function(assert) {
+  test('additional properties get added to `meta`', function(assert) {
     pub = new adapter.Publish({foo: 'something else'});
     pub.on('error', onError);
     assert.equal(pub.meta.foo, 'something else');

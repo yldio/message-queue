@@ -10,7 +10,7 @@ var defAdapterOpts = {
 };
 
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName);
+  var test = helpers.testFor(adapterName, ['shared', 'publish', 'publish']);
   var adapter = require('../../../lib/mqee')(adapterName);
   var opts = defAdapterOpts[adapterName];
   var meow = {
@@ -20,7 +20,7 @@ adapters.forEach(function(adapterName) {
   var pub = null;
   var channel = null;
 
-  test('shared/publish/publish:ready', function(assert) {
+  test('should fire `ready` when ready', function(assert) {
     pub = new adapter.Publish(opts);
     assert.ok(pub);
     pub.on('ready', function(err) {
@@ -30,7 +30,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared/publish/publish:plaintext', function(assert) {
+  test('should be able to write plain text', function(assert) {
     channel.publish('meow', function(err, info) {
       assert.equal(err, undefined);
       assert.ok(info.ack);
@@ -41,32 +41,31 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared/publish/publish:json_as_text', function(assert) {
-    channel.publish(JSON.stringify(meow), function(err, info) {
+  test('should be able to write json as plain text', function(assert) {
+    var plainJSON = JSON.stringify(meow);
+    channel.publish(plainJSON, function(err, info) {
       assert.equal(err, undefined);
       assert.ok(info.ack);
-      assert.equal(info.written, JSON.stringify(meow));
+      assert.equal(info.written, plainJSON);
       assert.end();
     });
   });
 
-  test('shared/publish/publish:json', function(assert) {
+  test('should be able to write json', function(assert) {
     channel.publish(meow, function(err, info) {
       assert.equal(err, undefined);
       assert.ok(info.ack);
-      debugger
       assert.deepEqual(JSON.parse(info.written), meow);
       assert.end();
     });
   });
 
-  test('shared/publish/publish:circular', function(assert) {
+  test('should remove circular attributes', function(assert) {
     var data = {name: 'felix'};
     data.data = data;
     channel.publish(data, function(err, info) {
       assert.equal(err, undefined);
       assert.ok(info.ack);
-      debugger
       assert.equal(
         info.written,
         JSON.stringify({name: 'felix', data: '[Circular ~]'}));
@@ -74,17 +73,11 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('shared/publish/publish:close_pub', function(assert) {
-    assert.pass('should be able to close connection');
-    pub.close(function(a,b,c,d) {
-      debugger
-      assert.end();
-    });
+  test('should be able to close the connection', function(assert) {
+    pub.close(assert.end);
   });
 
-  test('shared/publish/publish:cant_publish_to_closed', function(assert) {
-    debugger
-
+  test('cant publish after connection is closed', function(assert) {
     channel.publish(meow, function(err) {
       assert.equal(err.message, 'Connection closed');
       assert.end();
