@@ -39,6 +39,21 @@ queue.Publish.defaults;
 var queue = require('mqee')('redis');
 var pub = queue.Publish();
 
+//
+// {
+//   port: 6379,
+//   host: 'localhost',
+//   publishQueue: [],
+//   meta:
+//    { port: '6379',
+//      host: 'localhost',
+//      socket_nodelay: true,
+//      socket_keepalive: true },
+//   ready: false,
+//   closed: false,
+//   channel: [Function: createWriteStream] }
+//
+
 var channel = pub.channel('cats');
 channel.publish({meow: 'yay'}, console.log);
 ```
@@ -49,6 +64,19 @@ channel.publish({meow: 'yay'}, console.log);
 var queue = require('mqee')('redis');
 
 var cats = queue.Subscribe({channel: 'cats'});
+
+//
+// { channel: 'cats',
+//   port: 6379,
+//   host: 'localhost',
+//   meta:
+//    { port: '6379',
+//      host: 'localhost',
+//      channel: 'cats' },
+//   ready: false,
+//   closed: false,
+//   json: true }
+//
 
 cats.on('message', function(coolCat){
   console.log('message: ' + JSON.stringify(coolCat));
