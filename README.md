@@ -12,13 +12,14 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Channels & Validation](#channels--validation)
 - [API](#api)
   - [Publish](#publish-api)
-    - [Connection Events](#publish-connection-events)
+    - [Events](#publish-events)
     - [channel()](#pubchannelname-options)
     - [close()](#pubclosecb)
   - [Channel](#channel-api)
-    - [publish()](#ddd)
+    - [Events](#channel-events)
+    - [publish()](channelpublishmessage-cb)
   - [Subscribe](#subscribe-api)
-    - [Connection Events](#subscribe-connection-events)
+    - [Events](#subscribe-events)
     - [close()](#subclosecb)
 
 ## Usage
@@ -96,9 +97,9 @@ Default values are specified in `adapters/*/defaults.json`.
 
 Adapter specific options can be passed.
 
-#### Publish Connection Events
+#### Publish Events
 
-`pub` will emit some events about the state of the connection to the server.
+`pub` will emit events.
 
 ##### Ready
 
@@ -181,10 +182,49 @@ Errors are not emitted unless you are piping.
 
 ### Subscribe API
 
-Docs missing here
-close
-json: false
+```
+var cats = queue.Subscribe({channel: 'cats'});
 
-#### sub.subscribe(channel, options)
+cats.on('message', console.log);
+```
+
+`sub` is an `EventEmitter`.
+
+The following options can be used:
+
+- `channel`: **required** The channel to subscribe to.
+- `json`: Expect all messages to be json. Defaults to true.
+- `host`: The host for the server.
+- `port`: Define the port.
+
+Default values are specified in `adapters/*/defaults.json`.
+
+Adapter specific options can be passed.
+
+#### Subscribe Events
+
+`sub` will emit events.
+
+##### Message
+
+`sub` will emit `message` when a new message arrives
+
+##### Ready
+
+`sub` will emit `ready` when it has connected to the server.
+
+##### Error
+
+`sub` will emit error when encountering an error connecting to the server.
+
+##### Close
+
+`close` is emitted when the developer calls the `sub.close()` function.
+
+##### End
+
+`sub` emits `end` when for some reason the connection was terminated.
 
 #### sub.close(cb)
+
+Closes the connection to the server.
