@@ -16,7 +16,6 @@ a standard interface to access message queues. Both the publisher and the subscr
     - [channel()](#pubchannelname-options)
     - [close()](#pubclosecb)
   - [Channel](#channel-api)
-    - [Connection Events](#channel-connection-events)
     - [publish()](#ddd)
   - [Subscribe](#subscribe-api)
     - [Connection Events](#subscribe-connection-events)
