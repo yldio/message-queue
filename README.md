@@ -11,10 +11,10 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Subscribe](#subscribe)
   - [Channels & Validation](#channels--validation)
 - [API](#api)
-  — [Publish](#publish-api)
-  — [Connection Events](#publish-connection-events)
+  - [Publish](#publish-api)
+  - [Connection Events](#publish-connection-events)
   - [channel()](#pubchannelname-options)
-  - [close()](pubclosecb)
+  - [close()](#pubclosecb)
 
 ## Examples
 
