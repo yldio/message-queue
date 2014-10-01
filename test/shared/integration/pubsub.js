@@ -12,7 +12,7 @@ var plainContents = helpers.readFixture('files/plainstream.txt');
 
 var lines = plainContents
   .split('\n')
-  .filter(function (e) { return !!e; })
+  .filter(function(e) { return !!e; })
   .length;
 
 adapters.forEach(function(adapterName) {
@@ -137,7 +137,7 @@ adapters.forEach(function(adapterName) {
         var channel = pub.channel('cats', {
           schema: validateMeow
         });
-        channel.on('error', function (err) {
+        channel.on('error', function(err) {
           assert.equal(err.message, 'meow is required');
         });
         fs.createReadStream(oneBadApple).pipe(channel);

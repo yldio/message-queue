@@ -6,7 +6,7 @@ var queue = require('../lib/mqee')(adapter);
 
 var cats = queue.Subscribe({channel: 'cats'});
 
-cats.on('ready', function () {
+cats.on('ready', function() {
   console.log('connected');
 });
 

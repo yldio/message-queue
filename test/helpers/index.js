@@ -28,9 +28,9 @@ helpers.testFor = function(adapterName, path) {
   };
 };
 
-helpers.fixturePath = function (filename) {
-  return path.join(__dirname, '..', 'fixtures', filename)
-}
+helpers.fixturePath = function(filename) {
+  return path.join(__dirname, '..', 'fixtures', filename);
+};
 
 helpers.readFixture = function(filepath) {
   var ext = path.extname(filepath);

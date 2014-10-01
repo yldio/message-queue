@@ -63,7 +63,7 @@ cats.on('message', function(coolCat){
 
 Channels are streams, so you can pipe to them.
 
-You can use your joi schemas to validate and prevent bad messages from being sent.
+You can use your joi schemas to validate and prevent [bad messages](https://github.com/yldio/mqee/blob/master/examples/meow.json-stream.txt#L8) from being sent.
 
 ``` js
 'use strict';

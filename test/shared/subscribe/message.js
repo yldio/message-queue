@@ -1,7 +1,6 @@
 'use strict';
 
 var fs = require('fs');
-var path = require('path');
 var helpers = require('../../helpers');
 var adapters = helpers.adapters;
 var timeout = helpers.timeout;
@@ -175,7 +174,7 @@ adapters.forEach(function(adapterName) {
     }, timeout);
   });
 
-  test('should raise error if validation fails on pipe', function (assert) {
+  test('should raise error if validation fails on pipe', function(assert) {
     removeAllListeners();
 
     channel.on('error', function(err) {

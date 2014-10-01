@@ -10,7 +10,7 @@ var pub = queue.Publish();
 pub.on('ready', function() {
   var channel = pub.channel('cats', {schema: {meow : Joi.string().required()}});
 
-  channel.on('error', function (err) {
+  channel.on('error', function(err) {
     console.error('err: ' + err);
   });
 
