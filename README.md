@@ -31,6 +31,13 @@ queue.Publish.defaults;
 //
 ```
 
+## Table of Contents
+
+- [Features](#features)
+  - [Publish](#publish)
+  - [Subscribe](#subscribe)
+  - [Channels & Validation](#channels-validation)
+
 ## Features
 
 ### Publish
