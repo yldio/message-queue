@@ -162,20 +162,17 @@ adapters.forEach(function(adapterName) {
     sub.on('ready', function() {
       pub = new adapter.Publish();
 
-      pub.on('ready', function(err) {
-        assert.equal(err, undefined);
-        var channel = pub.channel('cats', {
-          schema: validateMeow
-        });
-        channel.on('error', function(err) {
-          assert.equal(err.message, 'meow is required');
-        });
-        fs.createReadStream(oneBadApple).pipe(channel);
-        setTimeout(function() {
-          pub.close();
-          sub.close(assert.end);
-        }, timeout);
+      var channel = pub.channel('cats', {
+        schema: validateMeow
       });
+      channel.on('error', function(err) {
+        assert.equal(err.message, 'meow is required');
+      });
+      fs.createReadStream(oneBadApple).pipe(channel);
+      setTimeout(function() {
+        pub.close();
+        sub.close(assert.end);
+      }, timeout);
 
       sub.on('message', function(msg) {
         assert.ok(msg.meow, msg.meow);
