@@ -52,10 +52,10 @@ Channels are streams so you can pipe to them.
 You can use your [joi](https://github.com/hapijs/joi) schemas to validate and prevent [bad messages](https://github.com/yldio/mqee/blob/master/examples/meow.json-stream.txt#L8) from being sent.
 
 ``` js
-var Joi = require('joi');
-
+var mqee = require('mqee');
 var fs = require('fs');
-var queue = require('mqee')('redis');
+var queue = mqee('redis');
+var Joi = mqee.Joi;
 var pub = queue.Publish();
 
 var channel = pub.channel('cats', {
