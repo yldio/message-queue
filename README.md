@@ -240,3 +240,9 @@ Closes the connection to the server.
 Redis does not support features such as ordering or persisting  messages. You can use config files to turn these features on and off on other providers such as `amqp` but each adapter has its own config format.
 
 Pull requests are welcome!
+
+[![Tests](http://img.shields.io/travis/yldio/message-queue.svg?style=flat-square)](https://travis-ci.org/yldio/message-queue)
+![Coverage](https://img.shields.io/badge/coverage-100%-green.svg?style=flat-square)
+![License](https://img.shields.io/badge/license-artistic--2-ff69b4.svg?style=flat-square)
+![Dependencies](https://img.shields.io/david/yldio/message-queue.svg?style=flat-square)
+![NPM](http://img.shields.io/npm/v/message-queue.svg?style=flat-square)
