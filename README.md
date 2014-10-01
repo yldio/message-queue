@@ -20,7 +20,7 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Subscribe](#subscribe-api)
     - [Connection Events](#subscribe-connection-events)
 
-## Examples
+## Usage
 
 ### Publish
 
