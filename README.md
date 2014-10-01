@@ -4,8 +4,6 @@ a standard interface to access message queues. Both the publisher and the subscr
 
 ## Table of Contents
 
-- [License](https://github.com/yldio/mqee/blob/master/LICENSE.md)
-- [Contributing](https://github.com/yldio/mqee/blob/master/CONTRIBUTING.md#contributing)
 - [Usage](#usage)
   - [Publish](#publish)
   - [Subscribe](#subscribe)
@@ -17,10 +15,13 @@ a standard interface to access message queues. Both the publisher and the subscr
     - [close()](#pubclosecb)
   - [Channel](#channel-api)
     - [Events](#channel-events)
-    - [publish()](channelpublishmessage-cb)
+    - [publish()](#channelpublishmessage-cb)
   - [Subscribe](#subscribe-api)
     - [Events](#subscribe-events)
     - [close()](#subclosecb)
+- [License](https://github.com/yldio/mqee/blob/master/LICENSE.md)
+- [Contributing](https://github.com/yldio/mqee/blob/master/CONTRIBUTING.md#contributing)
+- [Examples](https://github.com/yldio/mqee/tree/master/examples)
 
 ## Usage
 
