@@ -95,6 +95,36 @@ adapters.forEach(function(adapterName) {
     });
   });
 
+  test('should be able to buffer publishes before ready', function(assert) {
+    var sub = new adapter.Subscribe({channel: 'cats', json: false});
+    var pub;
+
+    //
+    // listening
+    //
+    sub.on('ready', function() {
+      pub = new adapter.Publish();
+      var channel = pub.channel('cats');
+      //
+      // not connected at this point
+      //
+      // message should be buffered and sent
+      // when ready
+      //
+      channel.publish('woof', function(err) {
+        assert.equal(err, undefined);
+      });
+    });
+
+    sub.on('error', assert.fail);
+    sub.on('message', function(msg) {
+      assert.equal(msg, 'woof');
+      pub.close();
+      sub.close();
+      assert.end();
+    });
+  });
+
   test('should be able to pipe plaintext', function(assert) {
     var pub;
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
@@ -155,7 +185,5 @@ adapters.forEach(function(adapterName) {
 
     });
   });
-
-// mixed plaintex with json
 
 });

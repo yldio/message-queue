@@ -24,7 +24,7 @@ var queue = mqee('redis');
 //     defaults: { port: '6379', host: 'localhost' } } }
 //
 
-console.log(queue.Publish.defaults);
+queue.Publish.defaults;
 
 //
 // { port: '6379', host: 'localhost' }
@@ -37,10 +37,8 @@ console.log(queue.Publish.defaults);
 var queue = require('mqee')('redis');
 var pub = queue.Publish();
 
-pub.on('ready', function() {
-  var channel = pub.channel('cats');
-  channel.publish({meow: 'yay'}, console.log);
-});
+var channel = pub.channel('cats');
+channel.publish({meow: 'yay'}, console.log);
 ```
 
 ## Subscribe
@@ -57,9 +55,9 @@ cats.on('message', function(coolCat){
 
 ## Channels & Validation
 
-Channels are streams, so you can pipe to them.
+Channels are streams so you can pipe to them.
 
-You can use your joi schemas to validate and prevent [bad messages](https://github.com/yldio/mqee/blob/master/examples/meow.json-stream.txt#L8) from being sent.
+You can use your [joi](https://github.com/hapijs/joi) schemas to validate and prevent [bad messages](https://github.com/yldio/mqee/blob/master/examples/meow.json-stream.txt#L8) from being sent.
 
 ``` js
 var Joi = require('joi');
@@ -68,22 +66,18 @@ var fs = require('fs');
 var queue = require('mqee')('redis');
 var pub = queue.Publish();
 
-pub.on('ready', function() {
-  var channel = pub.channel('cats', {
-    schema: {
-      meow : Joi.string().required()
-    }
-  });
-
-  channel.on('error', function (err) {
-    console.error('err: ' + err);
-  });
-
-  fs.createReadStream(__dirname + '/meow.json-stream.txt')
-    .pipe(channel);
+var channel = pub.channel('cats', {
+  schema: {
+    meow : Joi.string().required()
+  }
 });
 
-setTimeout(pub.close, 100);
+channel.on('error', function (err) {
+  console.error('err: ' + err);
+});
+
+fs.createReadStream(__dirname + '/meow.json-stream.txt')
+  .pipe(channel);
 ```
 
 I'm sorry, that's all the docs I had time to write so far. Pull requests are welcome

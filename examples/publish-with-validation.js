@@ -9,39 +9,39 @@ var pub = queue.Publish();
 
 pub.on('ready', function() {
   console.log('connected');
+});
 
-  var channel = pub.channel('cats', {
-    //
-    // schema to validate our messages
-    //
-    schema: {
-      meow : Joi.string().required()
-    }
-  });
+//
+// schema to validate our messages
+//
+var channel = pub.channel('cats', {
+  schema: {
+    meow : Joi.string().required()
+  }
+});
 
-  async.series([
-    function(ack) {
-      //
-      // this will publish cause it includes required
-      // `meow` which is a string
-      //
-      channel.publish({meow: 'yay'}, ack);
-    },
-    function(ack) {
-      //
-      // this will fail because it does not
-      // include the required `meow`
-      //
-      channel.publish({woof: 'problem officer'}, ack);
-    }
-  ], function onEnd(err, data) {
-    console.log(err ? err.message : data);
+async.series([
+  function(ack) {
     //
-    // avoid closing the socket
-    // before everything has been written
+    // this will publish cause it includes required
+    // `meow` which is a string
     //
-    // @see #6
+    channel.publish({meow: 'yay'}, ack);
+  },
+  function(ack) {
     //
-    setTimeout(pub.close, 100);
-  });
+    // this will fail because it does not
+    // include the required `meow`
+    //
+    channel.publish({woof: 'problem officer'}, ack);
+  }
+], function onEnd(err, data) {
+  console.log(err ? err.message : data);
+  //
+  // avoid closing the socket
+  // before everything has been written
+  //
+  // @see #6
+  //
+  setTimeout(pub.close, 200);
 });
