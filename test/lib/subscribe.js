@@ -26,7 +26,23 @@ test('lib/subscribe/instance:does_not_throw', function(assert) {
   assert.end();
 });
 
-/*
+test('lib/subscribe/subscribe:fails', function(assert) {
+  var oldSub = mockPublisher.subscribe.subscribe;
+  mockPublisher.subscribe.subscribe = function() {
+    return function(next) {
+      next(new Error('This happened'));
+    };
+  };
+
+  var subSub = new subscribeFactory(mockPublisher)({channel: 'dogs'});
+
+  subSub.on('error', function(err) {
+    mockPublisher.subscribe.subscribe = oldSub;
+    assert.equal(err.message, 'This happened');
+    assert.end();
+  });
+});
+
 test('lib/subscribe/onReady:fails', function(assert) {
   mockPublisher.subscribe.onReady = function() {
     return function(cb) {
@@ -34,10 +50,11 @@ test('lib/subscribe/onReady:fails', function(assert) {
     };
   };
 
-  notReadySub = new subscribeFactory(mockPublisher)({channel: 'dogs'});
+  var notReadySub = new subscribeFactory(mockPublisher)({channel: 'dogs'});
+
   notReadySub.on('error', function(err) {
     assert.equal(err.message, 'This is a mock');
   });
-  notReadySub.on('end', function() { assert.end(); });
+
+  notReadySub.on('end', assert.end);
 });
-*/

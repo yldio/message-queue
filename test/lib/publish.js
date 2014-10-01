@@ -26,13 +26,13 @@ test('lib/publish/publish:fails', function(assert) {
 
   var pubPub = new publishFactory(mockPublisher)();
 
-  pubPub.publish('queue', 'hey', assert.end);
+  pubPub.publish('queue', 'hey', assert.pass);
   pubPub.on('error', function(err) {
     assert.equal(err.message, 'This happened');
+    assert.end();
   });
 });
 
-/*
 test('lib/publish/prepareChannels:fails', function(assert) {
   mockPublisher.publish.prepareChannels = function() {
     return function(cb) {
@@ -43,11 +43,11 @@ test('lib/publish/prepareChannels:fails', function(assert) {
   var channelsFail = new publishFactory(mockPublisher)();
 
   channelsFail.on('error', function(err) {
-    assert.equal(err.message, 'Sad Panda');
+    assert.equal(err.message, 'Sad panda');
   });
+
   channelsFail.on('end', assert.end);
 });
-*/
 
 test('lib/publish/onReady:fails', function(assert) {
   mockPublisher.publish.onReady = function() {

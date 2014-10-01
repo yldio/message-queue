@@ -34,9 +34,7 @@ console.log(queue.Publish.defaults);
 ## Publish
 
 ``` js
-'use strict';
-
-var queue = require('../lib/mqee')('redis');
+var queue = require('mqee')('redis');
 var pub = queue.Publish();
 
 pub.on('ready', function() {
@@ -48,9 +46,7 @@ pub.on('ready', function() {
 ## Subscribe
 
 ```js
-'use strict';
-
-var queue = require('../lib/mqee')('redis');
+var queue = require('mqee')('redis');
 
 var cats = queue.Subscribe({channel: 'cats'});
 
@@ -66,12 +62,10 @@ Channels are streams, so you can pipe to them.
 You can use your joi schemas to validate and prevent [bad messages](https://github.com/yldio/mqee/blob/master/examples/meow.json-stream.txt#L8) from being sent.
 
 ``` js
-'use strict';
-
 var Joi = require('joi');
 
 var fs = require('fs');
-var queue = require('../lib/mqee')('redis');
+var queue = require('mqee')('redis');
 var pub = queue.Publish();
 
 pub.on('ready', function() {
