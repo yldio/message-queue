@@ -19,6 +19,7 @@ a standard interface to access message queues. Both the publisher and the subscr
     - [publish()](#ddd)
   - [Subscribe](#subscribe-api)
     - [Connection Events](#subscribe-connection-events)
+    - [close()](#subclosecb)
 
 ## Usage
 
@@ -118,7 +119,13 @@ Adapter specific options can be passed.
 
 #### pub.channel(name, options)
 
-Returns a channel named `name` for this publisher.
+Returns a channel named `name` for this publisher. See [Channel](#channel-api) for more details.
+
+#### pub.close(cb)
+
+Closes the connection to the server.
+
+### Channel API
 
 ``` js
 var Joi = mqee.Joi;
@@ -132,18 +139,52 @@ var channel = pub.channel('cats', {
 The following options can be used:
 
 - `schema`: The joi schema that should be used to validate messages before they are published.
+- `json`: Ensure only json can be published in this channel. Defaults to true.
 
-#### pub.close(cb)
+`channel` is a `Duplex Stream`. It is created with the `channel` method of the `Publish` object.
 
-Closes the connection to the server.
+``` js
+fs.createReadStream(__dirname + '/meow.json-stream.txt')
+  .pipe(channel)
+  .pipe(process.stdout);
+```
 
-### Channel API
+When piping you should listen for errors:
 
-`channel` is a `Stream`.
+``` js
+channel.on('error', function(err) {
+  console.error('err: ' + err);
+});
+```
 
-Docs missing here
+#### Channel Events
+
+##### Error
+
+`channel` will emit error events when validation fails, or there's a parsing problem. This only happens when you use `pipe`, since normal publishes use the error first in callback node.js idiom.
+
+#### channel.publish(message, cb)
+
+Publishes a message. If there is a schema, the message will be validated.
+
+``` js
+channel.publish('meow', function (err, ack) {
+  if (err) {
+    console.error('err: ' + err.message);
+  } else {
+    console.log(JSON.stringify(ack, null, 2));
+  }
+});
+```
+
+Errors are not emitted unless you are piping.
 
 ### Subscribe API
 
 Docs missing here
+close
+json: false
 
+#### sub.subscribe(channel, options)
+
+#### sub.close(cb)
