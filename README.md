@@ -55,6 +55,13 @@ var pub = queue.Publish();
 //
 
 var channel = pub.channel('cats');
+
+//
+// { writable: true,
+//   readable: true,
+//   json: false }
+//
+
 channel.publish({meow: 'yay'}, console.log);
 ```
 
