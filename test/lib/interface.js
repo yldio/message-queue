@@ -76,6 +76,11 @@ var debug = require('debug')('test/lib/interface');
     assert.end();
   });
 
+  //
+  // this is used to test
+  // that all interface methods
+  // are indeed validated
+  //
   var reduceOpts = [
     'createClient',
     'destroyClient',
@@ -87,6 +92,13 @@ var debug = require('debug')('test/lib/interface');
     'onReady',
     'subscribe'
   ].reduce(function(ac, method, i, l) {
+    //
+    // when we reach half of this array
+    // we go from publisher methods
+    // to subscriber methods
+    //
+    // @fixme: this is a bit cumbersome
+    //
     var what = ((i + 1) > Math.ceil(l.length / 2)) ? 'subscribe' : 'publish';
     var opts = _.clone(ac);
     var pubOpts = _.clone(ac.publish);
@@ -94,6 +106,9 @@ var debug = require('debug')('test/lib/interface');
     opts.publish = pubOpts;
     opts.subscribe = subOpts;
 
+    //
+    // test that method must exist
+    //
     test('lib/interface/no_' + method + '_' + what, function(assert) {
       assert.throws(function() {
         fac(opts);
@@ -101,6 +116,9 @@ var debug = require('debug')('test/lib/interface');
       assert.end();
     });
 
+    //
+    // test that method is a function
+    //
     test('lib/interface/bad_' + method + '_' + what, function(assert) {
       assert.throws(function() {
         opts[what][method] = false;

@@ -78,13 +78,6 @@ cats.on('error', function(err) {
   // close the subscriber on error
   //
   cats.close();
-});
-
-cats.on('end',   function() {
-  //
-  // close the publisher when i close
-  // the subscriber
-  //
   pub.close();
 });
 
@@ -102,10 +95,11 @@ pub.on('ready', function(){
     meow : Joi.string().required()
   };
 
-  var channel = pub.channel('cats', topic);
+  var channel = pub.channel('cats', {schema: topic});
 
-  channel.publish({meow: 'yay'});
-  channel.publish({woof: 'problem officer'});
+  channel.publish({meow: 'yay'}, function () {
+    channel.publish({woof: 'problem officer'}, console.log);
+  });
 });
 
 //
