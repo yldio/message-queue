@@ -12,9 +12,9 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Channels & Validation](#channels--validation)
 - [API](#api)
   - [Publish](#publish-api)
-  - [Connection Events](#publish-connection-events)
-  - [channel()](#pubchannelname-options)
-  - [close()](#pubclosecb)
+    - [Connection Events](#publish-connection-events)
+    - [channel()](#pubchannelname-options)
+    - [close()](#pubclosecb)
 
 ## Examples
 
@@ -24,28 +24,7 @@ a standard interface to access message queues. Both the publisher and the subscr
 var queue = require('mqee')('redis');
 var pub = queue.Publish();
 
-//
-// {
-//   port: 6379,
-//   host: 'localhost',
-//   publishQueue: [],
-//   meta:
-//    { port: '6379',
-//      host: 'localhost',
-//      socket_nodelay: true,
-//      socket_keepalive: true },
-//   ready: false,
-//   closed: false,
-//   channel: [Function: createWriteStream] }
-//
-
 var channel = pub.channel('cats');
-
-//
-// { writable: true,
-//   readable: true,
-//   json: false }
-//
 
 channel.publish({meow: 'yay'}, console.log);
 ```
@@ -56,19 +35,6 @@ channel.publish({meow: 'yay'}, console.log);
 var queue = require('mqee')('redis');
 
 var cats = queue.Subscribe({channel: 'cats'});
-
-//
-// { channel: 'cats',
-//   port: 6379,
-//   host: 'localhost',
-//   meta:
-//    { port: '6379',
-//      host: 'localhost',
-//      channel: 'cats' },
-//   ready: false,
-//   closed: false,
-//   json: true }
-//
 
 cats.on('message', function(coolCat){
   console.log('message: ' + JSON.stringify(coolCat));
@@ -159,8 +125,6 @@ var channel = pub.channel('cats', {
 });
 ```
 
-`channel` is a `Stream`.
-
 The following options can be used:
 
 - * `schema`: The joi schema that should be used to validate messages before they are published.
@@ -171,7 +135,11 @@ Closes the connection to the server.
 
 ### Channel
 
+`channel` is a `Stream`.
+
+Docs missing here
+
 ### Subscribe
 
-I'm sorry, that's all the docs I had time to write so far. Pull requests are welcome
+Docs missing here
 
