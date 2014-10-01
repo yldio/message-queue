@@ -1,7 +1,19 @@
 'use strict';
 
+var fs = require('fs');
 var helpers = require('../../helpers');
 var adapters = helpers.adapters;
+var timeout = helpers.timeout;
+
+var validateMeow = helpers.readFixture('topics/meow.js');
+var oneBadApple = helpers.fixturePath('files/badapple.txt');
+var plainStreamPath = helpers.fixturePath('files/plainstream.txt');
+var plainContents = helpers.readFixture('files/plainstream.txt');
+
+var lines = plainContents
+  .split('\n')
+  .filter(function (e) { return !!e; })
+  .length;
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'integration', 'pubsub']);
@@ -33,10 +45,10 @@ adapters.forEach(function(adapterName) {
     setTimeout(function() {
       if (!assert.ended) {
         assert.fail('timed out');
+        pub.close();
+        sub.close();
         assert.end();
       }
-      pub.close();
-      sub.close();
     }, 500);
   });
 
@@ -82,5 +94,68 @@ adapters.forEach(function(adapterName) {
       }, 500);
     });
   });
+
+  test('should be able to pipe plaintext', function(assert) {
+    var pub;
+    var sub = new adapter.Subscribe({channel: 'cats', json: false});
+
+    sub.on('ready', function() {
+      pub = new adapter.Publish();
+
+      pub.on('ready', function(err) {
+        assert.equal(err, undefined);
+        var channel = pub.channel('cats', {json: false});
+        fs.createReadStream(plainStreamPath).pipe(channel);
+        setTimeout(function() {
+          if (!assert.ended) {
+            assert.fail('test should ended');
+          }
+        }, timeout);
+      });
+
+      sub.on('message', function(msg) {
+        assert.pass('Got the message: ' + msg);
+        lines--;
+        if (lines === 0) {
+          pub.close();
+          sub.close(assert.end);
+        }
+      });
+
+    });
+  });
+
+  test('should filter elements not in the schema', function(assert) {
+    var pub;
+    var sub = new adapter.Subscribe({channel: 'cats'});
+
+    sub.on('ready', function() {
+      pub = new adapter.Publish();
+
+      pub.on('ready', function(err) {
+        assert.equal(err, undefined);
+        var channel = pub.channel('cats', {
+          schema: validateMeow
+        });
+        channel.on('error', function (err) {
+          assert.equal(err.message, 'meow is required');
+        });
+        fs.createReadStream(oneBadApple).pipe(channel);
+        setTimeout(function() {
+          pub.close();
+          sub.close(assert.end);
+        }, timeout);
+      });
+
+      sub.on('message', function(msg) {
+        assert.ok(msg.meow, msg.meow);
+        assert.equal(msg.but, undefined);
+        assert.deepEqual(Object.keys(msg), ['meow'], 'was filtered');
+      });
+
+    });
+  });
+
+// mixed plaintex with json
 
 });

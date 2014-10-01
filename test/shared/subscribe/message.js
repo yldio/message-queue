@@ -6,9 +6,10 @@ var helpers = require('../../helpers');
 var adapters = helpers.adapters;
 var timeout = helpers.timeout;
 
-var validateMeow = require('../../fixtures/topics/meow');
-var streamPath = path.join(__dirname, '../../fixtures/files/stream.txt');
-var badStreamPath = path.join(__dirname, '../../fixtures/files/bad_schema.txt');
+var validateMeow = helpers.readFixture('topics/meow.js');
+var streamPath = helpers.fixturePath('files/stream.txt');
+var oneBadApple = helpers.fixturePath('files/badapple.txt');
+var plainStreamPath = helpers.fixturePath('files/plainstream.txt');
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'subscribe', 'message']);
@@ -22,6 +23,7 @@ adapters.forEach(function(adapterName) {
   function removeAllListeners() {
     sub.removeAllListeners('message');
     sub.removeAllListeners('error');
+    channel.removeAllListeners('error');
   }
 
   test('publisher should be `ready`', function(assert) {
@@ -145,6 +147,7 @@ adapters.forEach(function(adapterName) {
     sub.on('error', assert.fail);
     fs.createReadStream(streamPath)
       .pipe(channel);
+    channel.on('error', assert.fail);
     setTimeout(function() {
       if (!assert.ended) {
         assert.fail('test should ended');
@@ -152,13 +155,35 @@ adapters.forEach(function(adapterName) {
     }, timeout);
   });
 
-  test('should raise error if pipe has validation error', function(assert) {
+  test('should raise error if pipe has json error', function(assert) {
     removeAllListeners();
-    pub.on('error', function(err) {
+    var i = 0;
+    channel.on('error', function(err) {
+      if (i !== 0) {
+        return;
+      }
+      assert.pass('should return a error message: ' + err);
+      assert.end();
+      i++;
+    });
+    fs.createReadStream(plainStreamPath)
+      .pipe(channel);
+    setTimeout(function() {
+      if (!assert.ended) {
+        assert.fail('test should ended');
+      }
+    }, timeout);
+  });
+
+  test('should raise error if validation fails on pipe', function (assert) {
+    removeAllListeners();
+
+    channel.on('error', function(err) {
       assert.pass('should return a error message: ' + err);
       assert.end();
     });
-    fs.createReadStream(badStreamPath)
+
+    fs.createReadStream(oneBadApple)
       .pipe(channel);
     setTimeout(function() {
       if (!assert.ended) {

@@ -26,7 +26,7 @@ adapters.forEach(function(adapterName) {
     pub.on('ready', function(err) {
       assert.equal(err, undefined);
       channel = pub.channel('cats');
-      pub.close(assert.end);
+      assert.end();
     });
   });
 

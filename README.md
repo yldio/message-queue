@@ -1,9 +1,8 @@
 # mqee
 
-a standard interface to access message queues
+a standard interface to access message queues. Both the publisher and the subscriber are event emitters.
 
 ``` javascript
-var Joi = require('joi');
 var mqee = require('mqee');
 
 //
@@ -25,86 +24,72 @@ var queue = mqee('redis');
 //     defaults: { port: '6379', host: 'localhost' } } }
 //
 
-console.log(rabbit.Publish.defaults);
+console.log(queue.Publish.defaults);
 
 //
 // { port: '6379', host: 'localhost' }
 //
+```
 
-var cats = new queue.Subscribe({
-  //
-  // subscribe to the `cats` channel
-  //
-  channel: 'cats',
-  //
-  // expect all messages to be json
-  // defaults to true, set to false for plaintext
-  //
-  json: true
-  //
-  // adapter specific options
-  //
+## Publish
+
+``` js
+'use strict';
+
+var queue = require('../lib/mqee')('redis');
+var pub = queue.Publish();
+
+pub.on('ready', function() {
+  var channel = pub.channel('cats');
+  channel.publish({meow: 'yay'}, console.log);
 });
+```
 
-//
-// { domain: null,
-//   _maxListeners: 10,
-//   channel: 'cats',
-//   port: 6379,
-//   host: 'localhost',
-//   meta:
-//    { port: '6379',
-//      host: 'localhost',
-//      channel: 'cats',
-//      socket_nodelay: true,
-//      socket_keepalive: true },
-//   json: true,
-//   cli: [Object],
-//   closed: true,
-//   _close: [Function],
-//   close: [Function] }
-//
+## Subscribe
+
+```js
+'use strict';
+
+var queue = require('../lib/mqee')('redis');
+
+var cats = queue.Subscribe({channel: 'cats'});
 
 cats.on('message', function(coolCat){
-  //
-  // you got a message
-  //
-  console.log(coolCat);
+  console.log('message: ' + JSON.stringify(coolCat));
 });
-
-cats.on('error', function(err) {
-  console.log(err);
-  //
-  // close the subscriber on error
-  //
-  cats.close();
-  pub.close();
-});
-
-var pub = new queue.Publish({
-  //
-  // adapter specific options
-  //
-});
-
-pub.on('ready', function(){
-  //
-  // topic is a joi schema used to validate messages
-  //
-  var topic = {
-    meow : Joi.string().required()
-  };
-
-  var channel = pub.channel('cats', {schema: topic});
-
-  channel.publish({meow: 'yay'}, function () {
-    channel.publish({woof: 'problem officer'}, console.log);
-  });
-});
-
-//
-// publisher events to listen to
-//
-pub.on('error', function(){});
-pub.on('end',   function(){});
 ```
+
+## Channels & Validation
+
+Channels are streams, so you can pipe to them.
+
+You can use your joi schemas to validate and prevent bad messages from being sent.
+
+``` js
+'use strict';
+
+var Joi = require('joi');
+
+var fs = require('fs');
+var queue = require('../lib/mqee')('redis');
+var pub = queue.Publish();
+
+pub.on('ready', function() {
+  var channel = pub.channel('cats', {
+    schema: {
+      meow : Joi.string().required()
+    }
+  });
+
+  channel.on('error', function (err) {
+    console.error('err: ' + err);
+  });
+
+  fs.createReadStream(__dirname + '/meow.json-stream.txt')
+    .pipe(channel);
+});
+
+setTimeout(pub.close, 100);
+```
+
+I'm sorry, that's all the docs I had time to write so far. Pull requests are welcome

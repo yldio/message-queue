@@ -28,6 +28,10 @@ helpers.testFor = function(adapterName, path) {
   };
 };
 
+helpers.fixturePath = function (filename) {
+  return path.join(__dirname, '..', 'fixtures', filename)
+}
+
 helpers.readFixture = function(filepath) {
   var ext = path.extname(filepath);
 
@@ -37,5 +41,5 @@ helpers.readFixture = function(filepath) {
 
   var read = (ext === '.js' || ext === '.json') ? require : readFile;
 
-  return read(path.join(__dirname, '..', 'fixtures', filepath), 'utf-8');
+  return read(helpers.fixturePath(filepath), 'utf-8');
 };
