@@ -33,12 +33,12 @@ queue.Publish.defaults;
 
 ## Table of Contents
 
-- [Features](#features)
+- [Examples](#examples)
   - [Publish](#publish)
   - [Subscribe](#subscribe)
-  - [Channels & Validation](#channels-validation)
+  - [Channels & Validation](#channels--validation)
 
-## Features
+## Examples
 
 ### Publish
 
@@ -125,3 +125,19 @@ fs.createReadStream(__dirname + '/meow.json-stream.txt')
 ```
 
 I'm sorry, that's all the docs I had time to write so far. Pull requests are welcome
+
+## Contributing
+
+Please make sure you add documentation and a test case for each patch you send. Please do not ignore the pre-commit hooks, or we will say no to the patch. This project has a strict 100% code coverage policy. However, that does not mean tests are sufficient just because code coverage is 100%. Please make sure you send adequate tests.
+
+``` sh
+npm test
+```
+
+If you are developing an adapter and want to make sure you didn't break others you can do something like
+
+``` sh
+ADAPTERS=redis,amqp npm test
+```
+
+where `list_doc_params` is the test name.
