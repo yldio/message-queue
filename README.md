@@ -2,43 +2,15 @@
 
 a standard interface to access message queues. Both the publisher and the subscriber are event emitters.
 
-``` javascript
-var mqee = require('mqee');
-
-//
-// { [Function]
-//   version: '0.0.0',
-//   path: '/Users/dscape/Desktop/dev/yldio/tc/mqee/lib',
-//   adapters: [ 'redis', 'amqp' ]
-// }
-//
-
-var queue = mqee('redis');
-
-//
-// { Publish:
-//   { [Function: Publish]
-//     defaults: { port: '6379', host: 'localhost' } },
-//  Subscribe:
-//   { [Function: Subscribe]
-//     defaults: { port: '6379', host: 'localhost' } } }
-//
-
-queue.Publish.defaults;
-
-//
-// { port: '6379', host: 'localhost' }
-//
-```
-
 ## Table of Contents
 
 - [License](https://github.com/yldio/mqee/blob/master/LICENSE.md)
 - [Contributing](https://github.com/yldio/mqee/blob/master/CONTRIBUTING.md#contributing)
-- [Examples](#examples)
+- [Usage](#usage)
   - [Publish](#publish)
   - [Subscribe](#subscribe)
   - [Channels & Validation](#channels--validation)
+- [API](#api)
 
 ## Examples
 
@@ -125,6 +97,40 @@ channel.on('error', function (err) {
 fs.createReadStream(__dirname + '/meow.json-stream.txt')
   .pipe(channel);
 ```
+
+## API
+
+### Publish
+
+``` js
+var queue = require('mqee')('redis');
+var pub = queue.Publish();
+```
+
+#### Connection Events
+
+`pub` will emit some events about the state of the connection to the server.
+
+##### Ready
+
+`pub` will emit `ready` when it has connected to the server, and it is not ready to be written to. You can still `publish` before server being ready since internally `mqee` will buffer those messages and publish once a connection is established.
+
+##### Error
+
+`pub` will emit error when encountering an error connecting to the server.
+
+
+##### Close
+
+`close` is emitted when the developer calls the `pub.close()` function.
+
+##### End
+
+`pub` emits `end` when for some reason the connection was terminated.
+
+### Channel
+
+### Subscribe
 
 I'm sorry, that's all the docs I had time to write so far. Pull requests are welcome
 
