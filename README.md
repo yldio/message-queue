@@ -13,6 +13,8 @@ a standard interface to access message queues. Both the publisher and the subscr
 - [API](#api)
   — [Publish](#publish-api)
   — [Connection Events](#publish-connection-events)
+  - [channel()](#pubchannelname-options)
+  - [close()](pubclosecb)
 
 ## Examples
 
