@@ -11,6 +11,8 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Subscribe](#subscribe)
   - [Channels & Validation](#channels--validation)
 - [API](#api)
+  — [Publish](#publish)
+    — [Connection Events](#publish-connection-events)
 
 ## Examples
 
@@ -107,7 +109,7 @@ var queue = require('mqee')('redis');
 var pub = queue.Publish();
 ```
 
-#### Connection Events
+#### Publish Connection Events
 
 `pub` will emit some events about the state of the connection to the server.
 
