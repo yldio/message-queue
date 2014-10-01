@@ -1,6 +1,6 @@
 # message-queue
 
-a standard interface to access message queues. Both the publisher and the subscriber are event emitters.
+a standard interface to access different message queues. Both the publisher and the subscriber are event emitters. Currently supports `redis` and `amqp`, e.g. RabbitMQ.
 
 ## Table of Contents
 
@@ -19,6 +19,7 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Subscribe](#subscribe-api)
     - [Events](#subscribe-events)
     - [close()](#subclosecb)
+- [Disclaimer](#disclaimer)
 - [License](https://github.com/yldio/message-queue/blob/master/LICENSE.md)
 - [Contributing](https://github.com/yldio/message-queue/blob/master/CONTRIBUTING.md#contributing)
 - [Examples](https://github.com/yldio/message-queue/tree/master/examples)
@@ -51,6 +52,8 @@ cats.on('message', function(coolCat){
 ### Channels & Validation
 
 Channels are streams so you can pipe to them.
+
+In json mode `message-queue` expects newline delimited json. For plaintext, each line gets published.
 
 You can use your [joi](https://github.com/hapijs/joi) schemas to validate and prevent [bad messages](https://github.com/yldio/message-queue/blob/master/examples/meow.json-stream.txt#L8) from being sent.
 
@@ -231,3 +234,9 @@ Adapter specific options can be passed.
 #### sub.close(cb)
 
 Closes the connection to the server.
+
+## Disclaimer
+
+Redis does not support features such as ordering or persisting  messages. You can use config files to turn these features on and off on other providers such as `amqp` but each adapter has its own config format.
+
+Pull requests are welcome!
