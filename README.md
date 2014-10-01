@@ -31,7 +31,9 @@ queue.Publish.defaults;
 //
 ```
 
-## Publish
+## Features
+
+### Publish
 
 ``` js
 var queue = require('mqee')('redis');
@@ -41,7 +43,7 @@ var channel = pub.channel('cats');
 channel.publish({meow: 'yay'}, console.log);
 ```
 
-## Subscribe
+### Subscribe
 
 ```js
 var queue = require('mqee')('redis');
@@ -53,7 +55,7 @@ cats.on('message', function(coolCat){
 });
 ```
 
-## Channels & Validation
+### Channels & Validation
 
 Channels are streams so you can pipe to them.
 
