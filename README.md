@@ -87,6 +87,8 @@ var queue = mq('redis');
 var pub = queue.Publish(options);
 ```
 
+`redis` is one of the supported back end adapters. You can find the full list on `mq.adapters`.
+
 `pub` is an `EventEmitter`.
 
 The following options can be used:
