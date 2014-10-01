@@ -15,6 +15,11 @@ a standard interface to access message queues. Both the publisher and the subscr
     - [Connection Events](#publish-connection-events)
     - [channel()](#pubchannelname-options)
     - [close()](#pubclosecb)
+  - [Channel](#channel-api)
+    - [Connection Events](#channel-connection-events)
+    - [publish()](#ddd)
+  - [Subscribe](#subscribe-api)
+    - [Connection Events](#subscribe-connection-events)
 
 ## Examples
 
@@ -133,13 +138,13 @@ The following options can be used:
 
 Closes the connection to the server.
 
-### Channel
+### Channel API
 
 `channel` is a `Stream`.
 
 Docs missing here
 
-### Subscribe
+### Subscribe API
 
 Docs missing here
 
