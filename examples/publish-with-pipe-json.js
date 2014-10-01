@@ -1,10 +1,11 @@
 'use strict';
 
-var Joi = require('joi');
 var adapter = process.env.ADAPTER || 'redis';
 
+var mqee = require('../lib/mqee');
+var Joi = mqee.Joi;
 var fs = require('fs');
-var queue = require('../lib/mqee')(adapter);
+var queue = mqee(adapter);
 var pub = queue.Publish();
 var channel = pub.channel('cats', {schema: {meow : Joi.string().required()}});
 

@@ -11,8 +11,8 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Subscribe](#subscribe)
   - [Channels & Validation](#channels--validation)
 - [API](#api)
-  — [Publish](#publish)
-    — [Connection Events](#publish-connection-events)
+  — [Publish](#publish-api)
+  — [Connection Events](#publish-connection-events)
 
 ## Examples
 
@@ -102,12 +102,26 @@ fs.createReadStream(__dirname + '/meow.json-stream.txt')
 
 ## API
 
-### Publish
+### Publish API
+
+Create a connection to the server.
 
 ``` js
-var queue = require('mqee')('redis');
-var pub = queue.Publish();
+var mqee = require('mqee');
+var queue = mqee('redis');
+var pub = queue.Publish(options);
 ```
+
+`pub` is an `EventEmitter`.
+
+The following options can be used:
+
+- * `host`: The host for the server.
+- * `port`: Define the port.
+
+Default values are specified in `adapters/*/defaults.json`.
+
+Adapter specific options can be passed.
 
 #### Publish Connection Events
 
@@ -129,6 +143,29 @@ var pub = queue.Publish();
 ##### End
 
 `pub` emits `end` when for some reason the connection was terminated.
+
+#### pub.channel(name, options)
+
+Returns a channel named `name` for this publisher.
+
+``` js
+var Joi = mqee.Joi;
+var channel = pub.channel('cats', {
+  schema: {
+    meow : Joi.string().required()
+  }
+});
+```
+
+`channel` is a `Stream`.
+
+The following options can be used:
+
+- * `schema`: The joi schema that should be used to validate messages before they are published.
+
+#### pub.close(cb)
+
+Closes the connection to the server.
 
 ### Channel
 

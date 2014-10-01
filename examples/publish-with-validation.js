@@ -2,9 +2,10 @@
 
 var adapter = process.env.ADAPTER || 'redis';
 
-var Joi = require('joi');
+var mqee = require('../lib/mqee');
+var Joi = mqee.Joi;
 var async = require('async');
-var queue = require('../lib/mqee')(adapter);
+var queue = mqee(adapter);
 var pub = queue.Publish();
 
 pub.on('ready', function() {
