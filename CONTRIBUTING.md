@@ -10,7 +10,7 @@ If you want something fixed the best alternative is a DIY.
 
 If you have fixed something and you would like it merged to master please make sure your pull request follows these rules:
 
-— [ ] My patch is isolated in a new branch, which name includes the issue I opened
+- [ ] My patch is isolated in a new branch, which name includes the issue I opened
 - [ ] Includes Documentation for new functionality
 - [ ] Follows the same code style as the rest of the code
 - [ ] Follows the `.jshintrc` file specified
