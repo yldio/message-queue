@@ -88,8 +88,8 @@ var pub = queue.Publish(options);
 
 The following options can be used:
 
-- * `host`: The host for the server.
-- * `port`: Define the port.
+- `host`: The host for the server.
+- `port`: Define the port.
 
 Default values are specified in `adapters/*/defaults.json`.
 
@@ -131,7 +131,7 @@ var channel = pub.channel('cats', {
 
 The following options can be used:
 
-- * `schema`: The joi schema that should be used to validate messages before they are published.
+- `schema`: The joi schema that should be used to validate messages before they are published.
 
 #### pub.close(cb)
 
