@@ -2,7 +2,7 @@
 
 var adapter = process.env.ADAPTER || 'redis';
 
-var queue = require('../lib/mqee')(adapter);
+var queue = require('../lib')(adapter);
 
 var cats = queue.Subscribe({
   channel: 'cats',

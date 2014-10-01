@@ -11,7 +11,7 @@ var defAdapterOpts = {
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'publish', 'publish']);
-  var adapter = require('../../../lib/mqee')(adapterName);
+  var adapter = require('../../../lib')(adapterName);
   var opts = defAdapterOpts[adapterName];
   var meow = {
     'meow':'yisss'

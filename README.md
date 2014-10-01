@@ -1,4 +1,4 @@
-# mqee
+# message-queue
 
 a standard interface to access message queues. Both the publisher and the subscriber are event emitters.
 
@@ -19,16 +19,16 @@ a standard interface to access message queues. Both the publisher and the subscr
   - [Subscribe](#subscribe-api)
     - [Events](#subscribe-events)
     - [close()](#subclosecb)
-- [License](https://github.com/yldio/mqee/blob/master/LICENSE.md)
-- [Contributing](https://github.com/yldio/mqee/blob/master/CONTRIBUTING.md#contributing)
-- [Examples](https://github.com/yldio/mqee/tree/master/examples)
+- [License](https://github.com/yldio/message-queue/blob/master/LICENSE.md)
+- [Contributing](https://github.com/yldio/message-queue/blob/master/CONTRIBUTING.md#contributing)
+- [Examples](https://github.com/yldio/message-queue/tree/master/examples)
 
 ## Usage
 
 ### Publish
 
 ``` js
-var queue = require('mqee')('redis');
+var queue = require('message-queue')('redis');
 var pub = queue.Publish();
 
 var channel = pub.channel('cats');
@@ -39,7 +39,7 @@ channel.publish({meow: 'yay'}, console.log);
 ### Subscribe
 
 ```js
-var queue = require('mqee')('redis');
+var queue = require('message-queue')('redis');
 
 var cats = queue.Subscribe({channel: 'cats'});
 
@@ -52,13 +52,13 @@ cats.on('message', function(coolCat){
 
 Channels are streams so you can pipe to them.
 
-You can use your [joi](https://github.com/hapijs/joi) schemas to validate and prevent [bad messages](https://github.com/yldio/mqee/blob/master/examples/meow.json-stream.txt#L8) from being sent.
+You can use your [joi](https://github.com/hapijs/joi) schemas to validate and prevent [bad messages](https://github.com/yldio/message-queue/blob/master/examples/meow.json-stream.txt#L8) from being sent.
 
 ``` js
-var mqee = require('mqee');
+var mq = require('message-queue');
 var fs = require('fs');
-var queue = mqee('redis');
-var Joi = mqee.Joi;
+var queue = mq('redis');
+var Joi = mq.Joi;
 var pub = queue.Publish();
 
 var channel = pub.channel('cats', {
@@ -82,8 +82,8 @@ fs.createReadStream(__dirname + '/meow.json-stream.txt')
 Create a connection to the server.
 
 ``` js
-var mqee = require('mqee');
-var queue = mqee('redis');
+var mq = require('message-queue');
+var queue = mq('redis');
 var pub = queue.Publish(options);
 ```
 
@@ -104,7 +104,7 @@ Adapter specific options can be passed.
 
 ##### Ready
 
-`pub` will emit `ready` when it has connected to the server, and it is not ready to be written to. You can still `publish` before server being ready since internally `mqee` will buffer those messages and publish once a connection is established.
+`pub` will emit `ready` when it has connected to the server, and it is not ready to be written to. You can still `publish` before server being ready since internally `message-queue` will buffer those messages and publish once a connection is established.
 
 ##### Error
 
@@ -130,7 +130,7 @@ Closes the connection to the server.
 ### Channel API
 
 ``` js
-var Joi = mqee.Joi;
+var Joi = mq.Joi;
 var channel = pub.channel('cats', {
   schema: {
     meow : Joi.string().required()

@@ -17,7 +17,7 @@ var lines = plainContents
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'integration', 'pubsub']);
-  var adapter = require('../../../lib/mqee')(adapterName);
+  var adapter = require('../../../lib')(adapterName);
 
   test('should be able to publish on same tick as `ready`', function(assert) {
     var pub;

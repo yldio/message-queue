@@ -7,7 +7,7 @@ adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName,
     ['shared', 'subscribe', 'constructor']);
 
-  var adapter = require('../../../lib/mqee')(adapterName);
+  var adapter = require('../../../lib')(adapterName);
 
   test('should create a subscriber for the channel', function(assert) {
     var sub = new adapter.Subscribe({

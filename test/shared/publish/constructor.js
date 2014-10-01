@@ -5,7 +5,7 @@ var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'publish', 'constructor']);
-  var adapter = require('../../../lib/mqee')(adapterName);
+  var adapter = require('../../../lib')(adapterName);
   var defaults = adapter.Publish.defaults;
   var pub = null;
 

@@ -1,8 +1,8 @@
 {
-  "name": "mqee",
+  "name": "message-queue",
   "version": "0.0.0",
   "description": "produce and consume message queues",
-  "main": "lib/mqee.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "istanbul cover ./node_modules/tape/bin/tape ./test/lib/*.js ./test/*/*/*.js && istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100",
     "jshint": "jshint -c .jshintrc --exclude-path .gitignore .",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/yldio/mqee"
+    "url": "git://github.com/yldio/message-queue"
   },
   "keywords": [
     "rabbitmq",
@@ -27,9 +27,9 @@
   "author": "",
   "license": "Artistic-2.0",
   "bugs": {
-    "url": "https://github.com/yldio/mqee/issues"
+    "url": "https://github.com/yldio/message-queue/issues"
   },
-  "homepage": "https://github.com/yldio/mqee",
+  "homepage": "https://github.com/yldio/message-queue",
   "dependencies": {
     "amqplib": "^0.2.1",
     "async": "^0.9.0",

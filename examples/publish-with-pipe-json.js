@@ -2,10 +2,10 @@
 
 var adapter = process.env.ADAPTER || 'redis';
 
-var mqee = require('../lib/mqee');
-var Joi = mqee.Joi;
+var mq = require('../lib');
+var Joi = mq.Joi;
 var fs = require('fs');
-var queue = mqee(adapter);
+var queue = mq(adapter);
 var pub = queue.Publish();
 var channel = pub.channel('cats', {schema: {meow : Joi.string().required()}});
 

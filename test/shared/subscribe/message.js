@@ -12,7 +12,7 @@ var plainStreamPath = helpers.fixturePath('files/plainstream.txt');
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'subscribe', 'message']);
-  var adapter = require('../../../lib/mqee')(adapterName);
+  var adapter = require('../../../lib')(adapterName);
 
   var sub = null;
   var pub = null;

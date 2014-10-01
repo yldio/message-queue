@@ -5,7 +5,7 @@ var adapters = helpers.adapters;
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'publish', 'topics']);
-  var adapter = require('../../../lib/mqee')(adapterName);
+  var adapter = require('../../../lib')(adapterName);
 
   var goodKitten        = helpers.readFixture('cats/good.json');
   var badKittenNoWhen   = helpers.readFixture('cats/amelie.json');
