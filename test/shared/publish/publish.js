@@ -5,7 +5,7 @@ var adapters = helpers.adapters;
 
 var defAdapterOpts = {
   amqp: {
-    channels: ['cats']
+    exchange: 'animals'
   }
 };
 
