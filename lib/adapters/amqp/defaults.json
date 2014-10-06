@@ -11,7 +11,7 @@
     "heartbeat": 0,
     "frameMax": 0
   },
-  "exchange": "",
+  "exchange": "message-queue",
   "exchangeType": "direct",
   "exchangeOptions": {
     "durable": false

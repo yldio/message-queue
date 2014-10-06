@@ -62,7 +62,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('additional properties get added to `meta`', function(assert) {
-    pub = new adapter.Publish({foo: 'something else'});
+    pub = new adapter.Publish({foo: 'something else', exchange: 'animals'});
     pub.on('error', onError);
     assert.equal(pub.meta.foo, 'something else');
     assert.equal(pub.meta.port, adapter.Publish.defaults.port);
