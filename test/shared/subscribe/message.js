@@ -39,11 +39,13 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to subscribe to cats', function(assert) {
+    debugger
     sub = new adapter.Subscribe({
       channel: 'cats',
       json: false
     });
     sub.on('ready', function() {
+      debugger
       assert.ok(sub);
       assert.equal(sub.channel, 'cats');
       assert.end();
@@ -51,6 +53,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to publish a meow', function(assert) {
+    debugger
     var meow = {meow: 'wow'};
     sub.on('message', function(data) {
       assert.notDeepEqual(data, meow);
@@ -176,7 +179,6 @@ adapters.forEach(function(adapterName) {
 
   test('should raise error if validation fails on pipe', function(assert) {
     removeAllListeners();
-
     channel.on('error', function(err) {
       assert.pass('should return a error message: ' + err);
       assert.end();

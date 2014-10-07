@@ -12,7 +12,7 @@
     "frameMax": 0
   },
   "exchange": "message-queue",
-  "exchangeType": "direct",
+  "exchangeType": "topic",
   "exchangeOptions": {
     "durable": false
   }
