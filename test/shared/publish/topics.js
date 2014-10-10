@@ -38,6 +38,11 @@ adapters.forEach(function(adapterName) {
     });
   });
 
+  test('should publish something without pass a callback', function(assert) {
+    channel.publish(goodKitten);
+    assert.end();
+  });
+
   test('should be able to handle dates', function(assert) {
     goodKitten.when = new Date();
     channel.publish(goodKitten, function(err, info) {
@@ -50,14 +55,14 @@ adapters.forEach(function(adapterName) {
 
   test('should not publish `null` when expecting schema', function(assert) {
     channel.publish(null, function(err) {
-      assert.equal(err.message, 'Expecting object not null');
+      assert.equal(err.message, 'VError: Expecting object not null');
       assert.end();
     });
   });
 
   test('should not allow empty when expecting schema', function(assert) {
     channel.publish({}, function(err) {
-      assert.equal(err.message, 'when is required');
+      assert.equal(err.message, 'ValidationError: when is required');
       assert.end();
     });
   });
@@ -65,35 +70,36 @@ adapters.forEach(function(adapterName) {
   test('should not allow for wrong type on time stamp', function(assert) {
     channel.publish({when: 'String'}, function(err) {
       assert.equal(err.message,
-        'when must be a number of milliseconds or valid date string');
+        'ValidationError: when must be a number of' +
+        ' milliseconds or valid date string');
       assert.end();
     });
   });
 
   test('should not publish string when expecting object', function(assert) {
     channel.publish('meow', function(err) {
-      assert.equal(err.message, 'Expecting object not string');
+      assert.equal(err.message, 'VError: Expecting object not string');
       assert.end();
     });
   });
 
   test('should require a `when` property', function(assert) {
-    channel.publish(badKittenNoWhen, function(err) {
-      assert.equal(err.message, 'when is required');
+    channel.publish(badKittenNoWhen, function(err) { 
+      assert.equal(err.message, 'ValidationError: when is required');
       assert.end();
     });
   });
 
   test('should require a `name` property', function(assert) {
     channel.publish(badKittenNoName, function(err) {
-      assert.equal(err.message, 'name is required');
+      assert.equal(err.message, 'ValidationError: name is required');
       assert.end();
     });
   });
 
   test('should required the kitten to like stuff', function(assert) {
     channel.publish(badKittenBadLikes, function(err) {
-      assert.equal(err.message, 'likes must be an array');
+      assert.equal(err.message, 'ValidationError: likes must be an array');
       assert.end();
     });
   });
