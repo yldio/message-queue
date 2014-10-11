@@ -43,7 +43,7 @@ adapters.forEach(function(adapterName) {
     var msg;
 
     pub.on('close', function() {
-      assert.pass('Publish closed "publish event"');
+      assert.pass('Publish closed');
     });
 
     channel = pub.channel('cats', {
@@ -51,15 +51,9 @@ adapters.forEach(function(adapterName) {
     });
 
     channel.on('error', function(err) {
-      assert.equal(err.message,
-        'Connection closed',
-        '"channel event" err.message');
-      assert.equal(err.type,
-        'adapter',
-        '"channel event" err.type');
-      assert.equal(err.data,
-        msg,
-        '"channel event" err.data');
+      assert.equal(err.message, 'Connection closed');
+      assert.equal(err.type, 'adapter');
+      assert.equal(err.data, msg);
     });
 
     function handler() {
@@ -70,11 +64,7 @@ adapters.forEach(function(adapterName) {
 
       setTimeout(function() {
         msg = messages.pop();
-        var res = channel.publish(msg);
-        assert.equal(msg, msg, '"channel" message');
-        assert.equal(res, 
-          pub.closed ? false : true, 
-          '"channel" publish result');
+        channel.publish(msg);
 
         if (!pub.closed) { 
           //
@@ -88,10 +78,10 @@ adapters.forEach(function(adapterName) {
 
     handler();
 
-    sub.on('message', function(msg) {
-      assert.ok(msg.meow);
-      assert.equal(msg.but, undefined);
-      assert.deepEqual(Object.keys(msg), ['meow'], 'was filtered');
+    sub.on('message', function(message) {
+      assert.ok(message.meow);
+      assert.equal(message.but, undefined);
+      assert.deepEqual(Object.keys(message), ['meow'], 'was filtered');
     });
   });
 
@@ -109,7 +99,7 @@ adapters.forEach(function(adapterName) {
     var msg = {woof: 'not'};
 
     pub.on('close', function() {
-      assert.pass('Publish closed "publish event"');
+      assert.pass('Publish closed');
       assert.end();
     });
 
@@ -118,19 +108,12 @@ adapters.forEach(function(adapterName) {
     });
 
     channel.on('error', function(err) {
-      assert.equal(err.message,
-        'ValidationError: meow is required',
-        '"channel event" err.message');
-      assert.equal(err.type,
-        'validation',
-        '"channel event" err.type');
-      assert.equal(err.data,
-        msg,
-        '"channel event" err.data');
+      assert.equal(err.message, 'ValidationError: meow is required');
+      assert.equal(err.type, 'validation');
+      assert.equal(err.data, msg);
       pub.close();
     });
 
-    var res = channel.publish(msg);
-    assert.equal(res, false);
+    channel.publish(msg);
   });
 });

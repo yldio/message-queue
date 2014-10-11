@@ -166,7 +166,7 @@ adapters.forEach(function(adapterName) {
         schema: validateMeow
       });
       channel.on('error', function(err) {
-        assert.equal(err.message, 'meow is required');
+        assert.equal(err.message, 'ValidationError: meow is required');
       });
       fs.createReadStream(oneBadApple).pipe(channel);
       setTimeout(function() {

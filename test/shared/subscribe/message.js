@@ -127,7 +127,7 @@ adapters.forEach(function(adapterName) {
     var meow = {woof: true};
     sub.on('message', assert.fail);
     channel.publish(meow, function(err) {
-      assert.equal(err.message, 'meow is required');
+      assert.equal(err.message, 'ValidationError: meow is required');
       setTimeout(assert.end, timeout);
     });
   });
