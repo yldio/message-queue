@@ -99,11 +99,6 @@ adapters.forEach(function(adapterName) {
   function(assert) {
     var msg = {woof: 'not'};
 
-    pub.on('close', function() {
-      assert.pass('Publish closed');
-      assert.end();
-    });
-
     channel = pub.channel('cats', {
       schema: validateMeow
     });
@@ -112,7 +107,7 @@ adapters.forEach(function(adapterName) {
       assert.equal(err.message, 'ValidationError: meow is required');
       assert.equal(err.type, 'validation');
       assert.equal(err.data, msg);
-      pub.close();
+      pub.close(assert.end);
     });
 
     channel.publish(msg);
