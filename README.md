@@ -71,7 +71,9 @@ var channel = pub.channel('cats', {
 });
 
 channel.on('error', function (err) {
-  console.error('err: ' + err);
+  console.error('err message:', err.message);
+  console.error('err type:', err.type);
+  console.error('data:', err.data);
 });
 
 fs.createReadStream(__dirname + '/meow.json-stream.txt')
@@ -168,13 +170,32 @@ channel.on('error', function(err) {
 
 ##### Error
 
-`channel` will emit error events when validation fails, or there's a parsing problem. This only happens when you use `pipe`, since normal publishes use the error first in callback node.js idiom.
 
-#### channel.publish(message, cb)
+**channel** will emit **error** events when:
+
+* validation fails - "validation" type error
+* connection fails between the Publish and the adapter - "adapter" type error
+* there's a parsing problem - "parsing" type error
+
+
+**error** object
+
+* 	message (error message)
+* 	type    (the error type - ["validation", "adapter", "parsing"])
+* 	data    (data attempted to be published)
+
+
+
+#### channel.publish(message, [cb])
 
 Publishes a message. If there is a schema, the message will be validated.
 
 ``` js
+//
+// example 1
+// using the `channel.publish` callback
+// to handle the flow
+//
 channel.publish('meow', function (err, ack) {
   if (err) {
     console.error('err: ' + err.message);
@@ -182,9 +203,26 @@ channel.publish('meow', function (err, ack) {
     console.log(JSON.stringify(ack, null, 2));
   }
 });
+
+
+//
+// example 2
+// using the `channel.on('error', cb)`
+// to handle the flow
+//
+channel.on('error', function(err) {
+	// err => object
+	// 	err.message (error message)
+	//	err.type    (error type - "adapter || validation")
+	//	err.data    (data tried to publish) 
+	//
+	// now we can send to log or something like Raygun.io
+});
+
+channel.publish('meow');
+
 ```
 
-Errors are not emitted unless you are piping.
 
 ### Subscribe API
 
