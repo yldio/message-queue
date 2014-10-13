@@ -1,23 +1,23 @@
 'use strict';
 
-var fs = require('fs');
-var helpers = require('../../helpers');
-var adapters = helpers.adapters;
-var timeout = helpers.timeout;
+var fs        = require('fs');
+var helpers   = require('../../helpers');
+var adapters  = helpers.adapters;
+var timeout   = helpers.timeout;
 
-var validateMeow = helpers.readFixture('topics/meow.js');
-var streamPath = helpers.fixturePath('files/stream.txt');
-var oneBadApple = helpers.fixturePath('files/badapple.txt');
+var validateMeow    = helpers.readFixture('topics/meow.js');
+var streamPath      = helpers.fixturePath('files/stream.txt');
+var oneBadApple     = helpers.fixturePath('files/badapple.txt');
 var plainStreamPath = helpers.fixturePath('files/plainstream.txt');
 
 adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'subscribe', 'message']);
   var adapter = require('../../../lib')(adapterName);
 
-  var sub = null;
-  var pub = null;
+  var sub     = null;
+  var pub     = null;
   var channel = null;
-  var dogs = null;
+  var dogs    = null;
 
   function removeAllListeners() {
     sub.removeAllListeners('message');
@@ -127,7 +127,7 @@ adapters.forEach(function(adapterName) {
     var meow = {woof: true};
     sub.on('message', assert.fail);
     channel.publish(meow, function(err) {
-      assert.equal(err.message, 'meow is required');
+      assert.equal(err.message, 'ValidationError: meow is required');
       setTimeout(assert.end, timeout);
     });
   });
