@@ -38,8 +38,10 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('should publish something without pass a callback', function(assert) {
+  test('should publish something without passing a callback', function(assert) {
+    channel.on('error', assert.fail);
     channel.publish(goodKitten);
+    assert.pass('published');
     assert.end();
   });
 
@@ -67,7 +69,7 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('should not allow for wrong type on time stamp', function(assert) {
+  test('should not allow for wrong type on timestamp', function(assert) {
     channel.publish({when: 'String'}, function(err) {
       assert.equal(err.message,
         'ValidationError: when must be a number of' +

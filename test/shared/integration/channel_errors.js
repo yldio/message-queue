@@ -79,6 +79,7 @@ adapters.forEach(function(adapterName) {
     handler();
 
     sub.on('message', function(message) {
+      assert.ok(message);
       assert.ok(message.meow);
       assert.equal(message.but, undefined);
       assert.deepEqual(Object.keys(message), ['meow'], 'was filtered');
@@ -115,5 +116,9 @@ adapters.forEach(function(adapterName) {
     });
 
     channel.publish(msg);
+  });
+
+  test('teardown', function(assert) { 
+    sub.close(assert.end);
   });
 });

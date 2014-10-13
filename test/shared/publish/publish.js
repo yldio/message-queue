@@ -73,6 +73,16 @@ adapters.forEach(function(adapterName) {
     });
   });
 
+  test('should be able to receive a Buffer to publish', function(assert) {
+    var buff = new Buffer(JSON.stringify(meow));
+    channel.publish(buff, function(err, info) {
+      assert.equal(err, undefined);
+      assert.ok(info.ack);
+      assert.deepEqual(JSON.parse(info.written), meow);
+      assert.end();
+    });
+  });
+
   test('should be able to close the connection', function(assert) {
     pub.close(assert.end);
   });
