@@ -66,7 +66,7 @@ adapters.forEach(function(adapterName) {
         msg = messages.pop();
         channel.publish(msg);
 
-        if (!pub.closed) { 
+        if (!pub.closed) {
           //
           // send one message and closes the publisher
           //
@@ -118,7 +118,7 @@ adapters.forEach(function(adapterName) {
     channel.publish(msg);
   });
 
-  test('teardown', function(assert) { 
+  test('teardown', function(assert) {
     sub.close(assert.end);
   });
 });

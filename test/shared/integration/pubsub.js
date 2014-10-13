@@ -19,22 +19,22 @@ adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, ['shared', 'integration', 'pubsub']);
   var adapter = require('../../../lib')(adapterName);
 
-  test('should be able to publish on same tick as `ready`', function(assert) { 
+  test('should be able to publish on same tick as `ready`', function(assert) {
     var pub;
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
 
     sub.on('ready', function() {
       pub = new adapter.Publish();
 
-      pub.on('ready', function(err) { 
+      pub.on('ready', function(err) {
         assert.equal(err, undefined);
         var channel = pub.channel('cats');
-        channel.publish('meow', function(err) { 
+        channel.publish('meow', function(err) {
           assert.equal(err, undefined);
         });
       });
 
-      sub.on('message', function() { 
+      sub.on('message', function() {
         assert.pass('Got the message');
         pub.close();
         sub.close(assert.end);
@@ -95,7 +95,8 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('should be able to buffer publishes before ready with callback', function(assert) {
+  test('should be able to buffer publishes before ready with callback',
+  function(assert) {
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
     var pub;
 

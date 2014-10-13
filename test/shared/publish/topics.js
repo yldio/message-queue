@@ -86,7 +86,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should require a `when` property', function(assert) {
-    channel.publish(badKittenNoWhen, function(err) { 
+    channel.publish(badKittenNoWhen, function(err) {
       assert.equal(err.message, 'ValidationError: when is required');
       assert.end();
     });
