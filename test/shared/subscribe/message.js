@@ -22,6 +22,7 @@ adapters.forEach(function(adapterName) {
   function removeAllListeners() {
     sub.removeAllListeners('message');
     sub.removeAllListeners('error');
+    sub.removeAllListeners('ready');
     channel.removeAllListeners('error');
   }
 
@@ -39,13 +40,11 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to subscribe to cats', function(assert) {
-    debugger
     sub = new adapter.Subscribe({
       channel: 'cats',
       json: false
     });
     sub.on('ready', function() {
-      debugger
       assert.ok(sub);
       assert.equal(sub.channel, 'cats');
       assert.end();
@@ -53,9 +52,11 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to publish a meow', function(assert) {
+    removeAllListeners();
     debugger
     var meow = {meow: 'wow'};
     sub.on('message', function(data) {
+      debugger
       assert.notDeepEqual(data, meow);
       assert.deepEqual(typeof data, 'string');
       //
@@ -63,13 +64,17 @@ adapters.forEach(function(adapterName) {
       //
       sub.close(assert.end);
     });
+    sub.on('error', function(err) {
+      debugger
+    });
     channel.publish(meow, function(err, info) {
       assert.equal(err, undefined);
       assert.deepEqual(JSON.parse(info.written), meow);
     });
   });
-
+return;
   test('should be able to subscribe to json cats', function(assert) {
+    debugger
     sub = new adapter.Subscribe({
       channel: 'cats'
     });
@@ -82,18 +87,20 @@ adapters.forEach(function(adapterName) {
 
   test('should be able to publish a json meow', function(assert) {
     var meow = {meow: 'wow'};
-    sub.on('message', function(data) {
+    debugger
+    sub.on('message', function(data) { 
       assert.deepEqual(data, meow);
       assert.deepEqual(typeof data, 'object');
       assert.end();
     });
-    channel.publish(meow, function(err, info) {
+    channel.publish(meow, function(err, info) { 
       assert.equal(err, undefined);
       assert.deepEqual(JSON.parse(info.written), meow);
     });
   });
 
   test('should raise error when json parse fails', function(assert) {
+    debugger
     removeAllListeners();
     var fail = '{{notjson}}';
     var dogSub = new adapter.Subscribe({
