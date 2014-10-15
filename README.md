@@ -1,3 +1,5 @@
+[![Support](https://img.shields.io/badge/get%20support-yld!-32bbee.svg?style=flat-square)](http://yld.io/contact?source=github-message-queue)[![Tests](http://img.shields.io/travis/yldio/message-queue.svg?style=flat-square)](https://travis-ci.org/yldio/message-queue)![Coverage](https://img.shields.io/badge/coverage-100%-ff69b4.svg?style=flat-square)[![Dependencies](https://img.shields.io/david/yldio/message-queue.svg?style=flat-square)](https://david-dm.org/yldio/message-queue)[![NPM](http://img.shields.io/npm/v/message-queue.svg?style=flat-square)](http://browsenpm.org/package/message-queue)[![Duplication](http://img.shields.io/codeclimate/github/yldio/message-queue.svg?style=flat-square)](https://codeclimate.com/github/yldio/message-queue)
+
 # message-queue
 
 a standard interface to access different message queues. Both the publisher and the subscriber are event emitters. Currently supports `redis` and `amqp`, e.g. RabbitMQ.
@@ -279,4 +281,3 @@ Redis does not support features such as ordering or persisting  messages. You ca
 
 Pull requests are welcome!
 
-[![Tests](http://img.shields.io/travis/yldio/message-queue.svg?style=flat-square)](https://travis-ci.org/yldio/message-queue)![Coverage](https://img.shields.io/badge/coverage-100%-32bbee.svg?style=flat-square)[![License](https://img.shields.io/badge/license-artistic--2-ff69b4.svg?style=flat-square)](http://opensource.org/licenses/Artistic-2.0)[![Dependencies](https://img.shields.io/david/yldio/message-queue.svg?style=flat-square)](https://david-dm.org/yldio/message-queue)[![NPM](http://img.shields.io/npm/v/message-queue.svg?style=flat-square)](http://browsenpm.org/package/message-queue)[![Duplication](http://img.shields.io/codeclimate/github/yldio/message-queue.svg?style=flat-square)](https://codeclimate.com/github/yldio/message-queue)
