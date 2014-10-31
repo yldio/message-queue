@@ -6,18 +6,26 @@
   "vhost": "",
   "ssl": false,
   "socketOptions": {
+    "connectionTimeout": 1,
     "noDelay": true,
     "channelMax": 0,
     "heartbeat": 0,
     "frameMax": 0
   },
+  "ackMessages": true,
   "exchange": "message-queue",
   "exchangeType": "direct",
   "exchangeOptions": {
-    "durable": false
+    "durable": true
   },
-  "consumeOptions": {
-    "noAck": true,
+  "queueOptions": {
+    "autoDelete": true
+  },
+  "consumerOptions": {
+    "noAck": false,
     "exclusive": false
+  },
+  "producerOptions": {
+    "persistent": true
   }
 }

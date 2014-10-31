@@ -10,7 +10,7 @@ adapters.forEach(function(adapterName) {
   var pub = null;
 
   function onError(err) {
-    console.error(err);
+    console.error('\n', err);
   }
 
   test('defaults should include host and port', function(assert) {

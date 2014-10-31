@@ -83,6 +83,17 @@ adapters.forEach(function(adapterName) {
     });
   });
 
+  /*test('should use shared resource',
+  function(assert) {
+    var tempPub = new adapter.Publish(opts);
+    tempPub.on('ready', function() {
+      assert.equal(err, undefined);
+      debugger
+      tempPub.close(function() {
+      });
+    });
+  });*/
+
   test('should be able to close the connection', function(assert) {
     pub.close(assert.end);
   });

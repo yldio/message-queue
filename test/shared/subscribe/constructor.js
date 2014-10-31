@@ -10,6 +10,7 @@ adapters.forEach(function(adapterName) {
   var adapter = require('../../../lib')(adapterName);
 
   test('should create a subscriber for the channel', function(assert) {
+    debugger
     var sub = new adapter.Subscribe({
       channel: 'cats'
     });
@@ -19,20 +20,24 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should require a channel name', function(assert) {
+    assert.plan(1);
+    debugger
     assert.throws(function() {
       new adapter.Subscribe();
     }, /channel is required/);
-    assert.end();
   });
 
   test('should not allow empty object', function(assert) {
+    assert.plan(1);
+    debugger
     assert.throws(function() {
       new adapter.Subscribe({});
     }, /channel is required/);
-    assert.end();
   });
 
   test('should not allow a `null` channel', function(assert) {
+    assert.plan(1);
+    debugger
     assert.throws(function() {
       new adapter.Subscribe({
         channel: null
@@ -44,7 +49,6 @@ adapters.forEach(function(adapterName) {
     //        is defined. couldnt find a good way of
     //        writing that test
     //
-    assert.end();
   });
 
 });
