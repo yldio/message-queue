@@ -27,7 +27,6 @@ adapters.forEach(function(adapterName) {
     sub = new adapter.Subscribe({channel: 'cats'});
     sub.on('error', assert.fail);
     sub.on('ready', function() {
-      debugger
       assert.pass('sub is ready!');
       assert.end();
     });

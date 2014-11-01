@@ -53,7 +53,6 @@ adapters.forEach(function(adapterName) {
 
   test('should be able to publish a meow', function(assert) {
     removeAllListeners();
-    debugger
     var meow = {meow: 'wow'};
     sub.on('message', function(data) {
       debugger
@@ -68,6 +67,7 @@ adapters.forEach(function(adapterName) {
       debugger
     });
     channel.publish(meow, function(err, info) {
+      debugger
       assert.equal(err, undefined);
       assert.deepEqual(JSON.parse(info.written), meow);
     });
