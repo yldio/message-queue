@@ -27,6 +27,7 @@ adapters.forEach(function(adapterName) {
   }
 
   test('publisher should be `ready`', function(assert) {
+    debugger
     pub = new adapter.Publish();
     assert.ok(pub);
     pub.on('ready', function(err) {
@@ -40,6 +41,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to subscribe to cats', function(assert) {
+    debugger
     sub = new adapter.Subscribe({
       channel: 'cats',
       json: false
@@ -52,10 +54,10 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to publish a meow', function(assert) {
+    debugger
     removeAllListeners();
     var meow = {meow: 'wow'};
     sub.on('message', function(data) {
-      debugger
       assert.notDeepEqual(data, meow);
       assert.deepEqual(typeof data, 'string');
       //
@@ -63,16 +65,13 @@ adapters.forEach(function(adapterName) {
       //
       sub.close(assert.end);
     });
-    sub.on('error', function(err) {
-      debugger
-    });
+    sub.on('error', function(err) {});
     channel.publish(meow, function(err, info) {
-      debugger
       assert.equal(err, undefined);
       assert.deepEqual(JSON.parse(info.written), meow);
     });
   });
-return;
+
   test('should be able to subscribe to json cats', function(assert) {
     debugger
     sub = new adapter.Subscribe({
@@ -86,8 +85,8 @@ return;
   });
 
   test('should be able to publish a json meow', function(assert) {
-    var meow = {meow: 'wow'};
     debugger
+    var meow = {meow: 'wow'};
     sub.on('message', function(data) { 
       assert.deepEqual(data, meow);
       assert.deepEqual(typeof data, 'object');
@@ -107,6 +106,7 @@ return;
       channel: 'dogs',
       json: true
     });
+    dogSub.on('error', function(err) {});
     dogSub.on('ready', function() {
       assert.ok(dogSub);
       assert.equal(dogSub.channel, 'dogs');
@@ -122,6 +122,7 @@ return;
   });
 
   test('shouldnt listen on the wrong channel', function(assert) {
+    debugger
     removeAllListeners();
     var bark = {bark: true};
     sub.on('message', assert.fail);
@@ -133,6 +134,7 @@ return;
   });
 
   test('shouldnt get message when validation fails', function(assert) {
+    debugger
     removeAllListeners();
     var meow = {woof: true};
     sub.on('message', assert.fail);
@@ -143,6 +145,7 @@ return;
   });
 
   test('should allow piping', function(assert) {
+    debugger
     removeAllListeners();
     var i = 0;
     sub.on('message', function(message) {
@@ -165,6 +168,7 @@ return;
   });
 
   test('should raise error if pipe has json error', function(assert) {
+    debugger
     removeAllListeners();
     var i = 0;
     channel.on('error', function(err) {
@@ -185,6 +189,7 @@ return;
   });
 
   test('should raise error if validation fails on pipe', function(assert) {
+    debugger
     removeAllListeners();
     channel.on('error', function(err) {
       assert.pass('should return a error message: ' + err);
@@ -201,8 +206,11 @@ return;
   });
 
   test('teardown', function(assert) {
+    debugger
     pub.close(function() {
+      sub.on('error', function(err) {});
       sub.close(assert.end);
     });
+    pub.on('error', function(err) {});
   });
 });
