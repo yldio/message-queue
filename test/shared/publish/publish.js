@@ -23,6 +23,7 @@ adapters.forEach(function(adapterName) {
   test('should fire `ready` when ready', function(assert) {
     pub = new adapter.Publish(opts);
     assert.ok(pub);
+    pub.on('error', assert.fail);
     pub.on('ready', function(err) {
       assert.equal(err, undefined);
       channel = pub.channel('cats');
@@ -82,17 +83,6 @@ adapters.forEach(function(adapterName) {
       assert.end();
     });
   });
-
-  /*test('should use shared resource',
-  function(assert) {
-    var tempPub = new adapter.Publish(opts);
-    tempPub.on('ready', function() {
-      assert.equal(err, undefined);
-      debugger
-      tempPub.close(function() {
-      });
-    });
-  });*/
 
   test('should be able to close the connection', function(assert) {
     pub.close(assert.end);

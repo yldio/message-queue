@@ -27,21 +27,21 @@ adapters.forEach(function(adapterName) {
   }
 
   test('publisher should be `ready`', function(assert) {
-    debugger
     pub = new adapter.Publish();
     assert.ok(pub);
-    pub.on('ready', function(err) {
-      assert.equal(err, undefined);
+    pub.on('error', assert.fail);
+    pub.on('ready', function() {
       channel = pub.channel('cats', {
         schema: validateMeow
       });
+      channel.on('error', assert.fail);
       dogs = pub.channel('dogs');
+      dogs.on('error', assert.fail);
       assert.end();
     });
   });
 
   test('should be able to subscribe to cats', function(assert) {
-    debugger
     sub = new adapter.Subscribe({
       channel: 'cats',
       json: false
@@ -54,7 +54,6 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to publish a meow', function(assert) {
-    debugger
     removeAllListeners();
     var meow = {meow: 'wow'};
     sub.on('message', function(data) {
@@ -63,9 +62,11 @@ adapters.forEach(function(adapterName) {
       //
       // recreate the subscriber in the next test
       //
-      sub.close(assert.end);
+      sub.close(function() {
+        assert.end();
+      });
     });
-    sub.on('error', function(err) {});
+    sub.on('error', assert.fail);
     channel.publish(meow, function(err, info) {
       assert.equal(err, undefined);
       assert.deepEqual(JSON.parse(info.written), meow);
@@ -73,7 +74,6 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to subscribe to json cats', function(assert) {
-    debugger
     sub = new adapter.Subscribe({
       channel: 'cats'
     });
@@ -85,35 +85,32 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to publish a json meow', function(assert) {
-    debugger
     var meow = {meow: 'wow'};
-    sub.on('message', function(data) { 
+    sub.on('message', function(data) {
       assert.deepEqual(data, meow);
       assert.deepEqual(typeof data, 'object');
       assert.end();
     });
-    channel.publish(meow, function(err, info) { 
+    channel.publish(meow, function(err, info) {
       assert.equal(err, undefined);
       assert.deepEqual(JSON.parse(info.written), meow);
     });
   });
 
   test('should raise error when json parse fails', function(assert) {
-    debugger
     removeAllListeners();
     var fail = '{{notjson}}';
     var dogSub = new adapter.Subscribe({
       channel: 'dogs',
       json: true
     });
-    dogSub.on('error', function(err) {});
+    dogSub.on('error', function(err) {
+      assert.equal(err.message, 'Not valid json {{notjson}}');
+      dogSub.close(assert.end);
+    });
     dogSub.on('ready', function() {
       assert.ok(dogSub);
       assert.equal(dogSub.channel, 'dogs');
-      dogSub.on('error', function(err) {
-        assert.equal(err.message, 'Not valid json {{notjson}}');
-        dogSub.close(assert.end);
-      });
       dogs.publish(fail, function(err, info) {
         assert.equal(err, undefined);
         assert.equal(info.written, fail);
@@ -122,7 +119,6 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shouldnt listen on the wrong channel', function(assert) {
-    debugger
     removeAllListeners();
     var bark = {bark: true};
     sub.on('message', assert.fail);
@@ -134,7 +130,6 @@ adapters.forEach(function(adapterName) {
   });
 
   test('shouldnt get message when validation fails', function(assert) {
-    debugger
     removeAllListeners();
     var meow = {woof: true};
     sub.on('message', assert.fail);
@@ -145,7 +140,6 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should allow piping', function(assert) {
-    debugger
     removeAllListeners();
     var i = 0;
     sub.on('message', function(message) {
@@ -168,7 +162,6 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should raise error if pipe has json error', function(assert) {
-    debugger
     removeAllListeners();
     var i = 0;
     channel.on('error', function(err) {
@@ -188,29 +181,33 @@ adapters.forEach(function(adapterName) {
     }, timeout);
   });
 
+  //
+  // ERROR in the sub`channel` is comming from here
+  //
   test('should raise error if validation fails on pipe', function(assert) {
-    debugger
     removeAllListeners();
+    sub.on('message', function(message) {
+      assert.pass(JSON.stringify(message));
+    });
     channel.on('error', function(err) {
       assert.pass('should return a error message: ' + err);
-      assert.end();
     });
-
     fs.createReadStream(oneBadApple)
-      .pipe(channel);
-    setTimeout(function() {
+      .pipe(channel)
+      .on('end', assert.end);
+    /*setTimeout(function() {
       if (!assert.ended) {
         assert.fail('test should ended');
       }
-    }, timeout);
+    }, timeout);*/
   });
 
+  //
+  // the conn is not closing!!!!???
+  //
   test('teardown', function(assert) {
-    debugger
     pub.close(function() {
-      sub.on('error', function(err) {});
       sub.close(assert.end);
     });
-    pub.on('error', function(err) {});
   });
 });

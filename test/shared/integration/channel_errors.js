@@ -117,4 +117,3 @@ adapters.forEach(function(adapterName) {
     sub.close(assert.end);
   });
 });
-

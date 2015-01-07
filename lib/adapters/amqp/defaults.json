@@ -6,7 +6,7 @@
   "vhost": "",
   "ssl": false,
   "socketOptions": {
-    "connectionTimeout": 1,
+    "connectionTimeout": 5,
     "noDelay": true,
     "channelMax": 0,
     "heartbeat": 0,
@@ -14,7 +14,7 @@
   },
   "ackMessages": true,
   "exchange": "message-queue",
-  "exchangeType": "direct",
+  "exchangeType": "topic",
   "exchangeOptions": {
     "durable": true
   },
