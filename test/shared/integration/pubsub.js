@@ -20,6 +20,7 @@ adapters.forEach(function(adapterName) {
   var adapter = require('../../../lib')(adapterName);
 
   test('should be able to publish on same tick as `ready`', function(assert) {
+    debugger
     var pub;
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
 
@@ -57,6 +58,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('able to receive messages without `sub#ready`', function(assert) {
+    debugger
     var pub = new adapter.Publish();
     var sub;
     var i = 0;
@@ -107,6 +109,7 @@ adapters.forEach(function(adapterName) {
 
   test('should be able to buffer publishes before ready with callback',
   function(assert) {
+    debugger
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
     var pub;
 
@@ -138,6 +141,7 @@ adapters.forEach(function(adapterName) {
 
   test('should be able to buffer publishes before ready without callback',
   function(assert) {
+    debugger
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
     var pub;
 
