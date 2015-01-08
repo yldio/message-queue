@@ -105,7 +105,7 @@ adapters.forEach(function(adapterName) {
       json: true
     });
     dogSub.on('error', function(err) {
-      assert.equal(err.message, 'Not valid json {{notjson}}');
+      assert.equal(err.message, 'Not valid json: {{notjson}}');
       dogSub.close(assert.end);
     });
     dogSub.on('ready', function() {

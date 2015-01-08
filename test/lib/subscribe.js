@@ -38,7 +38,7 @@ test('lib/subscribe/subscribe:fails', function(assert) {
 
   subSub.on('error', function(err) {
     mockPublisher.subscribe.subscribe = oldSub;
-    assert.equal(err.message, 'This happened');
+    assert.equal(err.message, 'Not valid json: This happened');
     assert.end();
   });
 });
