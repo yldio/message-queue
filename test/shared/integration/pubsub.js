@@ -10,12 +10,12 @@ var oneBadApple     = helpers.fixturePath('files/badapple.txt');
 var plainStreamPath = helpers.fixturePath('files/plainstream.txt');
 var plainContents   = helpers.readFixture('files/plainstream.txt');
 
-var lines = plainContents
-  .split('\n')
-  .filter(function(e) { return !!e; })
-  .length;
-
 adapters.forEach(function(adapterName) {
+  var lines = plainContents
+    .split('\n')
+    .filter(function(e) { return !!e; })
+    .length;
+
   var test = helpers.testFor(adapterName, ['shared', 'integration', 'pubsub']);
   var adapter = require('../../../lib')(adapterName);
 

@@ -1,7 +1,7 @@
 'use strict';
 
-var helpers = require('../../helpers');
-var adapters = helpers.adapters;
+var helpers   = require('../../helpers');
+var adapters  = helpers.adapters;
 
 var defAdapterOpts = {
   amqp: {
@@ -10,12 +10,14 @@ var defAdapterOpts = {
 };
 
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName, ['shared', 'publish', 'publish']);
+  var test    = helpers.testFor(adapterName, [
+    'shared',
+    'publish',
+    'publish'
+  ]);
   var adapter = require('../../../lib')(adapterName);
-  var opts = defAdapterOpts[adapterName];
-  var meow = {
-    'meow':'yisss'
-  };
+  var opts    = defAdapterOpts[adapterName];
+  var meow    = {'meow':'yisss'};
 
   var pub = null;
   var channel = null;
@@ -96,6 +98,6 @@ adapters.forEach(function(adapterName) {
   });
 
   test('teardown', function(assert) {
-    pub.close(assert.end);
+    assert.end();
   });
 });

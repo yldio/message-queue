@@ -5,9 +5,30 @@ var adapters  = helpers.adapters;
 
 var validateMeow = helpers.readFixture('topics/meow.js');
 
+function setSubscribe(subscribe, opts, assert) {
+  return new subscribe(opts)
+    .on('error', assert.fail)
+    .on('ready', function() {
+      assert.pass('sub is ready!');
+      assert.end();
+    });
+}
+
+function setPublish(publish, opts, assert) {
+  return new publish(opts)
+    .on('error', assert.fail)
+    .on('ready', function() {
+      assert.pass('pub is ready!');
+      assert.end();
+    });
+}
+
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName,
-    ['shared', 'integration', 'channel_errors']);
+  var test = helpers.testFor(adapterName, [
+    'shared',
+    'integration',
+    'channel_errors']
+  );
 
   var adapter = require('../../../lib')(adapterName);
   var pub;
@@ -15,21 +36,11 @@ adapters.forEach(function(adapterName) {
   var channel;
 
   test('set pub', function(assert) {
-    pub = new adapter.Publish();
-    pub.on('error', assert.fail);
-    pub.on('ready', function() {
-      assert.pass('pub is ready!');
-      assert.end();
-    });
+    pub = setPublish(adapter.Publish, {}, assert);
   });
 
   test('set sub', function(assert) {
-    sub = new adapter.Subscribe({channel: 'cats'});
-    sub.on('error', assert.fail);
-    sub.on('ready', function() {
-      assert.pass('sub is ready!');
-      assert.end();
-    });
+    sub = setSubscribe(adapter.Subscribe, {channel: 'cats'}, assert);
   });
 
   test('should emit "channel.error" when exist problems in the conn',
@@ -87,12 +98,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('set pub one more time', function(assert) {
-    pub = new adapter.Publish();
-    pub.on('error', assert.fail);
-    pub.on('ready', function() {
-      assert.pass('pub is ready!');
-      assert.end();
-    });
+    pub = setPublish(adapter.Publish, {}, assert);
   });
 
   test('should emit "channel.error" when exist problems in the validation',

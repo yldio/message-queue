@@ -6,8 +6,8 @@
   "vhost": "",
   "ssl": false,
   "socketOptions": {
-    "connectionTimeout": 5,
-    "noDelay": true,
+    "connectionTimeout": 30,
+    "noDelay": false,
     "channelMax": 0,
     "heartbeat": 0,
     "frameMax": 0
