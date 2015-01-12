@@ -119,8 +119,7 @@ adapters.forEach(function(adapterName) {
     channel.publish(msg);
   });
 
-
-  test('teardown', function(assert) { 
+  test('teardown', function(assert) {
     sub.close(assert.end());
   });
 });
