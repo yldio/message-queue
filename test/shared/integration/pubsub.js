@@ -53,7 +53,7 @@ adapters.forEach(function(adapterName) {
         sub.close();
         assert.end();
       }
-    }, 500);
+    }, 1000);
   });
 
   test('able to receive messages without `sub#ready`', function(assert) {
