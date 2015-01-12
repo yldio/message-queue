@@ -10,11 +10,12 @@ var defAdapterOpts = {
 };
 
 adapters.forEach(function(adapterName) {
-  var test    = helpers.testFor(adapterName, [
+  var test = helpers.testFor(adapterName, [
     'shared',
     'publish',
     'publish'
   ]);
+
   var adapter = require('../../../lib')(adapterName);
   var opts    = defAdapterOpts[adapterName];
   var meow    = {'meow':'yisss'};
@@ -97,7 +98,5 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('teardown', function(assert) {
-    assert.end();
-  });
+  test('teardown', function(assert) { assert.end(); });
 });

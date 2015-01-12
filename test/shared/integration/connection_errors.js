@@ -39,12 +39,47 @@ adapters.forEach(function(adapterName) {
   var pub;
   var sub;
 
+  test('amqp - set a bad exchange for the Publish', function(assert) {
+    if ('amqp' === adapterName) {
+      pub = new adapter.Publish({exchange: null});
+      pub.on('error', function(err) {
+        assert.equal(err.message, 'Field \'exchange\' is the wrong type;' +
+          ' must be a string (up to 255 chars)');
+        pub.close(assert.end);
+      });
+    } else {
+      assert.end();
+    }
+  });
+
+  test('amqp - set a bad exchange for the Subscribe', function(assert) {
+    if ('amqp' === adapterName) {
+      sub = new adapter.Subscribe({channel: 'cats', exchange: null});
+      sub.on('error', function(err) {
+        assert.equal(err.message, 'Field \'exchange\' is the wrong type;' +
+          ' must be a string (up to 255 chars)');
+        sub.close(assert.end);
+      });
+    } else {
+      assert.end();
+    }
+  });
+
+  test('close a Publish twice', function(assert) {
+    pub = new adapter.Publish();
+    pub.on('ready', function() {
+      assert.ok(true, 'ok');
+      pub.close(function() {
+        pub.close(assert.end);
+      });
+    });
+  });
+
   //
   // in the doc we should have the different between
   // `unexpected closed connection` in the publish
   // & the `close connection` in the channel
   //
-
   test('an unexpected closed connection in the Publish', function(assert) {
     // for now let's ignore Redis
     if ('redis' === adapterName) {

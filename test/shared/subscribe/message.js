@@ -202,9 +202,6 @@ adapters.forEach(function(adapterName) {
     }, timeout);*/
   });
 
-  //
-  // the conn is not closing!!!!???
-  //
   test('teardown', function(assert) {
     pub.close(function() {
       sub.close(assert.end);

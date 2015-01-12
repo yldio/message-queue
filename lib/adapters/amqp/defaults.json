@@ -15,6 +15,7 @@
   "exchangeOptions": {
     "durable": true
   },
+  "queue": "",
   "queueOptions": {
     "autoDelete": true
   },

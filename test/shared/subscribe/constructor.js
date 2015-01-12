@@ -50,5 +50,4 @@ adapters.forEach(function(adapterName) {
     //        writing that test
     //
   });
-
 });
