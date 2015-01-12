@@ -4,12 +4,11 @@ var helpers = require('../../helpers');
 var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName,
-    [
-      'shared',
-      'publish',
-      'freelist.FreeList(name, max, constructor);ctor'
-    ]);
+  var test = helpers.testFor(adapterName, [
+    'shared',
+    'publish',
+    'freelist.FreeList(name, max, constructor);ctor'
+  ]);
 
   var adapter   = require('../../../lib')(adapterName);
   var defaults  = adapter.Publish.defaults;

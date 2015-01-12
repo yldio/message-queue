@@ -4,8 +4,11 @@ var helpers = require('../../helpers');
 var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName,
-    ['shared', 'subscribe', 'constructor']);
+  var test = helpers.testFor(adapterName, [
+    'shared',
+    'subscribe',
+    'constructor'
+  ]);
 
   var adapter = require('../../../lib')(adapterName);
 
