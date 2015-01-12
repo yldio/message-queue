@@ -1,3 +1,6 @@
+[![By](https://img.shields.io/badge/made%20by-yld!-32bbee.svg?style=flat-square)](http://yld.io/contact?source=github-message-queue)[![Chat](https://img.shields.io/badge/help-gitter-eb9348.svg?style=flat-square)](https://gitter.im/yldio)[![Tests](http://img.shields.io/travis/yldio/message-queue.svg?style=flat-square)](https://travis-ci.org/yldio/message-queue)![Coverage](https://img.shields.io/badge/coverage-100%-ff69b4.svg?style=flat-square)[![Dependencies](https://img.shields.io/david/yldio/message-queue.svg?style=flat-square)](https://david-dm.org/yldio/message-queue)[![NPM](http://img.shields.io/npm/v/message-queue.svg?style=flat-square)](http://browsenpm.org/package/message-queue)[![Duplication](http://img.shields.io/codeclimate/github/yldio/message-queue.svg?style=flat-square)](https://codeclimate.com/github/yldio/message-queue)
+
+
 # message-queue
 
 a standard interface to access different message queues. Both the publisher and the subscriber are event emitters. Currently supports `redis` and `amqp`, e.g. RabbitMQ.
@@ -71,7 +74,9 @@ var channel = pub.channel('cats', {
 });
 
 channel.on('error', function (err) {
-  console.error('err: ' + err);
+  console.error('err message:', err.message);
+  console.error('err type:', err.type);
+  console.error('data:', err.data);
 });
 
 fs.createReadStream(__dirname + '/meow.json-stream.txt')
@@ -168,13 +173,32 @@ channel.on('error', function(err) {
 
 ##### Error
 
-`channel` will emit error events when validation fails, or there's a parsing problem. This only happens when you use `pipe`, since normal publishes use the error first in callback node.js idiom.
 
-#### channel.publish(message, cb)
+**channel** will emit **error** events when:
+
+* validation fails - "validation" type error
+* connection fails between the Publish and the adapter - "adapter" type error
+* there's a parsing problem - "parsing" type error
+
+
+**error** object
+
+*   message (error message)
+*   type    (the error type - ["validation", "adapter", "parsing"])
+*   data    (data attempted to be published)
+
+
+
+#### channel.publish(message, [cb])
 
 Publishes a message. If there is a schema, the message will be validated.
 
 ``` js
+//
+// example 1
+// using the `channel.publish` callback
+// to handle the flow
+//
 channel.publish('meow', function (err, ack) {
   if (err) {
     console.error('err: ' + err.message);
@@ -182,9 +206,26 @@ channel.publish('meow', function (err, ack) {
     console.log(JSON.stringify(ack, null, 2));
   }
 });
+
+
+//
+// example 2
+// using the `channel.on('error', cb)`
+// to handle the flow
+//
+channel.on('error', function(err) {
+  // err => object
+  //  err.message (error message)
+  //  err.type    (error type - "adapter || validation")
+  //  err.data    (data tried to publish) 
+  //
+  // now we can send to log or something like Raygun.io
+});
+
+channel.publish('meow');
+
 ```
 
-Errors are not emitted unless you are piping.
 
 ### Subscribe API
 
@@ -241,4 +282,3 @@ Redis does not support features such as ordering or persisting  messages. You ca
 
 Pull requests are welcome!
 
-[![Tests](http://img.shields.io/travis/yldio/message-queue.svg?style=flat-square)](https://travis-ci.org/yldio/message-queue)![Coverage](https://img.shields.io/badge/coverage-100%-32bbee.svg?style=flat-square)[![License](https://img.shields.io/badge/license-artistic--2-ff69b4.svg?style=flat-square)](http://opensource.org/licenses/Artistic-2.0)[![Dependencies](https://img.shields.io/david/yldio/message-queue.svg?style=flat-square)](https://david-dm.org/yldio/message-queue)[![NPM](http://img.shields.io/npm/v/message-queue.svg?style=flat-square)](http://browsenpm.org/package/message-queue)[![Duplication](http://img.shields.io/codeclimate/github/yldio/message-queue.svg?style=flat-square)](https://codeclimate.com/github/yldio/message-queue)
