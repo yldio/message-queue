@@ -6,7 +6,7 @@ var adapters  = helpers.adapters;
 var validateMeow = helpers.readFixture('topics/meow.js');
 
 function setSubscribe(subscribe, opts, assert) {
-  return new subscribe(opts)
+  return subscribe(opts)
     .on('error', assert.fail)
     .on('ready', function() {
       assert.pass('sub is ready!');
@@ -15,7 +15,7 @@ function setSubscribe(subscribe, opts, assert) {
 }
 
 function setPublish(publish, opts, assert) {
-  return new publish(opts)
+  return publish(opts)
     .on('error', assert.fail)
     .on('ready', function() {
       assert.pass('pub is ready!');
@@ -119,7 +119,8 @@ adapters.forEach(function(adapterName) {
     channel.publish(msg);
   });
 
-  test('teardown', function(assert) {
-    sub.close(assert.end);
+
+  test('teardown', function(assert) { 
+    sub.close(assert.end());
   });
 });

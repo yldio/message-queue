@@ -1,7 +1,6 @@
 'use strict';
 
-var fs        = require('fs');
-var execFile  = require('child_process').execFile
+var execFile  = require('child_process').execFile;
 var join      = require('path').join;
 var helpers   = require('../../helpers');
 var adapters  = helpers.adapters;
@@ -10,7 +9,7 @@ var restart = join(__dirname, '../..', 'helpers/restart_server.sh');
 
 function cbForOnReady(adapter, assert) {
   return function() {
-    function res(error, stdout, stderr) {
+    function res(error) {
       if (error) {
         assert.fail(error);
       }
@@ -33,7 +32,7 @@ adapters.forEach(function(adapterName) {
   var test = helpers.testFor(adapterName, [
     'shared',
     'integration',
-    'connection'
+    'connection_errors'
   ]);
   var adapter = require('../../../lib')(adapterName);
 
@@ -41,8 +40,8 @@ adapters.forEach(function(adapterName) {
   var sub;
 
   //
-  // in the doc we should have the different between 
-  // `unexpected closed connection` in the publish 
+  // in the doc we should have the different between
+  // `unexpected closed connection` in the publish
   // & the `close connection` in the channel
   //
 
@@ -59,7 +58,7 @@ adapters.forEach(function(adapterName) {
   });
 
   //
-  // in the channel_errors we already cover the 
+  // in the channel_errors we already cover the
   // unexpected closed connection` & the `close connection` for the Subscribe
   // but is better to have both cases in this test
   //
@@ -75,5 +74,5 @@ adapters.forEach(function(adapterName) {
     }
   });
 
-  test('teardown', function(assert){ assert.end(); })
+  test('teardown', function(assert) { assert.end(); });
 });

@@ -7,10 +7,7 @@
   "ssl": false,
   "socketOptions": {
     "connectionTimeout": 30,
-    "noDelay": false,
-    "channelMax": 0,
-    "heartbeat": 0,
-    "frameMax": 0
+    "noDelay": true
   },
   "ackMessages": true,
   "exchange": "message-queue",
