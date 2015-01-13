@@ -4,8 +4,11 @@ var helpers = require('../../helpers');
 var adapters = require('../../helpers').adapters;
 
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName,
-    ['shared', 'subscribe', 'constructor']);
+  var test = helpers.testFor(adapterName, [
+    'shared',
+    'subscribe',
+    'constructor'
+  ]);
 
   var adapter = require('../../../lib')(adapterName);
 
@@ -15,24 +18,26 @@ adapters.forEach(function(adapterName) {
     });
     assert.ok(sub);
     assert.equal(sub.channel, 'cats');
+    sub.on('error', assert.pass);
     sub.close(assert.end);
   });
 
   test('should require a channel name', function(assert) {
+    assert.plan(1);
     assert.throws(function() {
       new adapter.Subscribe();
     }, /channel is required/);
-    assert.end();
   });
 
   test('should not allow empty object', function(assert) {
+    assert.plan(1);
     assert.throws(function() {
       new adapter.Subscribe({});
     }, /channel is required/);
-    assert.end();
   });
 
   test('should not allow a `null` channel', function(assert) {
+    assert.plan(1);
     assert.throws(function() {
       new adapter.Subscribe({
         channel: null
@@ -44,7 +49,5 @@ adapters.forEach(function(adapterName) {
     //        is defined. couldnt find a good way of
     //        writing that test
     //
-    assert.end();
   });
-
 });

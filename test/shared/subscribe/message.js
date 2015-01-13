@@ -22,18 +22,21 @@ adapters.forEach(function(adapterName) {
   function removeAllListeners() {
     sub.removeAllListeners('message');
     sub.removeAllListeners('error');
+    sub.removeAllListeners('ready');
     channel.removeAllListeners('error');
   }
 
   test('publisher should be `ready`', function(assert) {
     pub = new adapter.Publish();
     assert.ok(pub);
-    pub.on('ready', function(err) {
-      assert.equal(err, undefined);
+    pub.on('error', assert.fail);
+    pub.on('ready', function() {
       channel = pub.channel('cats', {
         schema: validateMeow
       });
+      channel.on('error', assert.fail);
       dogs = pub.channel('dogs');
+      dogs.on('error', assert.fail);
       assert.end();
     });
   });
@@ -51,6 +54,7 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to publish a meow', function(assert) {
+    removeAllListeners();
     var meow = {meow: 'wow'};
     sub.on('message', function(data) {
       assert.notDeepEqual(data, meow);
@@ -58,8 +62,11 @@ adapters.forEach(function(adapterName) {
       //
       // recreate the subscriber in the next test
       //
-      sub.close(assert.end);
+      sub.close(function() {
+        assert.end();
+      });
     });
+    sub.on('error', assert.fail);
     channel.publish(meow, function(err, info) {
       assert.equal(err, undefined);
       assert.deepEqual(JSON.parse(info.written), meow);
@@ -97,13 +104,13 @@ adapters.forEach(function(adapterName) {
       channel: 'dogs',
       json: true
     });
+    dogSub.on('error', function(err) {
+      assert.equal(err.message, 'Not valid json: {{notjson}}');
+      dogSub.close(assert.end);
+    });
     dogSub.on('ready', function() {
       assert.ok(dogSub);
       assert.equal(dogSub.channel, 'dogs');
-      dogSub.on('error', function(err) {
-        assert.equal(err.message, 'Not valid json {{notjson}}');
-        dogSub.close(assert.end);
-      });
       dogs.publish(fail, function(err, info) {
         assert.equal(err, undefined);
         assert.equal(info.written, fail);
@@ -174,21 +181,25 @@ adapters.forEach(function(adapterName) {
     }, timeout);
   });
 
+  //
+  // ERROR in the sub`channel` is comming from here
+  //
   test('should raise error if validation fails on pipe', function(assert) {
     removeAllListeners();
-
+    sub.on('message', function(message) {
+      assert.pass(JSON.stringify(message));
+    });
     channel.on('error', function(err) {
       assert.pass('should return a error message: ' + err);
-      assert.end();
     });
-
     fs.createReadStream(oneBadApple)
-      .pipe(channel);
-    setTimeout(function() {
+      .pipe(channel)
+      .on('end', assert.end);
+    /*setTimeout(function() {
       if (!assert.ended) {
         assert.fail('test should ended');
       }
-    }, timeout);
+    }, timeout);*/
   });
 
   test('teardown', function(assert) {

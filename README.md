@@ -183,9 +183,9 @@ channel.on('error', function(err) {
 
 **error** object
 
-* 	message (error message)
-* 	type    (the error type - ["validation", "adapter", "parsing"])
-* 	data    (data attempted to be published)
+*   message (error message)
+*   type    (the error type - ["validation", "adapter", "parsing"])
+*   data    (data attempted to be published)
 
 
 
@@ -214,12 +214,12 @@ channel.publish('meow', function (err, ack) {
 // to handle the flow
 //
 channel.on('error', function(err) {
-	// err => object
-	// 	err.message (error message)
-	//	err.type    (error type - "adapter || validation")
-	//	err.data    (data tried to publish) 
-	//
-	// now we can send to log or something like Raygun.io
+  // err => object
+  //  err.message (error message)
+  //  err.type    (error type - "adapter || validation")
+  //  err.data    (data tried to publish) 
+  //
+  // now we can send to log or something like Raygun.io
 });
 
 channel.publish('meow');

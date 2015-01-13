@@ -10,12 +10,12 @@ var oneBadApple     = helpers.fixturePath('files/badapple.txt');
 var plainStreamPath = helpers.fixturePath('files/plainstream.txt');
 var plainContents   = helpers.readFixture('files/plainstream.txt');
 
-var lines = plainContents
-  .split('\n')
-  .filter(function(e) { return !!e; })
-  .length;
-
 adapters.forEach(function(adapterName) {
+  var lines = plainContents
+    .split('\n')
+    .filter(function(e) { return !!e; })
+    .length;
+
   var test = helpers.testFor(adapterName, ['shared', 'integration', 'pubsub']);
   var adapter = require('../../../lib')(adapterName);
 
@@ -23,15 +23,20 @@ adapters.forEach(function(adapterName) {
     var pub;
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
 
+    function errorCb(err) {
+      assert.fail(err);
+    }
+
+    sub.on('error', errorCb);
+
     sub.on('ready', function() {
       pub = new adapter.Publish();
+      pub.on('error', errorCb);
 
-      pub.on('ready', function(err) {
-        assert.equal(err, undefined);
+      pub.on('ready', function() {
         var channel = pub.channel('cats');
-        channel.publish('meow', function(err) {
-          assert.equal(err, undefined);
-        });
+        channel.on('error', errorCb);
+        channel.publish('meow');
       });
 
       sub.on('message', function() {
@@ -39,7 +44,6 @@ adapters.forEach(function(adapterName) {
         pub.close();
         sub.close(assert.end);
       });
-
     });
 
     setTimeout(function() {
@@ -57,8 +61,15 @@ adapters.forEach(function(adapterName) {
     var sub;
     var i = 0;
 
-    pub.on('ready', function(err) {
+    function errorCb(err) {
+      assert.fail(err);
+    }
+
+    pub.on('error', errorCb);
+
+    pub.on('ready', function() {
       sub = new adapter.Subscribe({channel: 'cats', json: false});
+      sub.on('error', errorCb);
 
       sub.on('message', function() {
         i++;
@@ -73,9 +84,8 @@ adapters.forEach(function(adapterName) {
         }, 100);
       });
 
-      assert.equal(err, undefined);
-
       var channel = pub.channel('cats');
+      channel.on('error', errorCb);
 
       //
       // should not be intercepted because we were not listening
@@ -159,12 +169,19 @@ adapters.forEach(function(adapterName) {
     var pub;
     var sub = new adapter.Subscribe({channel: 'cats', json: false});
 
+    function errorCb(err) {
+      assert.fail(err);
+    }
+
+    sub.on('error', errorCb);
+
     sub.on('ready', function() {
       pub = new adapter.Publish();
+      pub.on('error', errorCb);
 
-      pub.on('ready', function(err) {
-        assert.equal(err, undefined);
+      pub.on('ready', function() {
         var channel = pub.channel('cats', {json: false});
+        channel.on('error', errorCb);
         fs.createReadStream(plainStreamPath).pipe(channel);
         setTimeout(function() {
           if (!assert.ended) {
@@ -175,13 +192,11 @@ adapters.forEach(function(adapterName) {
 
       sub.on('message', function(msg) {
         assert.pass('Got the message: ' + msg);
-        lines--;
-        if (lines === 0) {
+        if (--lines === 0) {
           pub.close();
           sub.close(assert.end);
         }
       });
-
     });
   });
 
@@ -209,8 +224,6 @@ adapters.forEach(function(adapterName) {
         assert.equal(msg.but, undefined);
         assert.deepEqual(Object.keys(msg), ['meow'], 'was filtered');
       });
-
     });
   });
-
 });

@@ -8,3 +8,4 @@ coverage
 .grunt
 build/Release
 node_modules
+vm

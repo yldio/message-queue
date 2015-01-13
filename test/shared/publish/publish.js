@@ -1,21 +1,24 @@
 'use strict';
 
-var helpers = require('../../helpers');
-var adapters = helpers.adapters;
+var helpers   = require('../../helpers');
+var adapters  = helpers.adapters;
 
 var defAdapterOpts = {
   amqp: {
-    channels: ['cats']
+    exchange: 'animals'
   }
 };
 
 adapters.forEach(function(adapterName) {
-  var test = helpers.testFor(adapterName, ['shared', 'publish', 'publish']);
+  var test = helpers.testFor(adapterName, [
+    'shared',
+    'publish',
+    'publish'
+  ]);
+
   var adapter = require('../../../lib')(adapterName);
-  var opts = defAdapterOpts[adapterName];
-  var meow = {
-    'meow':'yisss'
-  };
+  var opts    = defAdapterOpts[adapterName];
+  var meow    = {'meow':'yisss'};
 
   var pub = null;
   var channel = null;
@@ -23,6 +26,7 @@ adapters.forEach(function(adapterName) {
   test('should fire `ready` when ready', function(assert) {
     pub = new adapter.Publish(opts);
     assert.ok(pub);
+    pub.on('error', assert.fail);
     pub.on('ready', function(err) {
       assert.equal(err, undefined);
       channel = pub.channel('cats');
@@ -94,7 +98,5 @@ adapters.forEach(function(adapterName) {
     });
   });
 
-  test('teardown', function(assert) {
-    pub.close(assert.end);
-  });
+  test('teardown', function(assert) { assert.end(); });
 });

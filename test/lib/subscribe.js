@@ -30,7 +30,7 @@ test('lib/subscribe/subscribe:fails', function(assert) {
   var oldSub = mockPublisher.subscribe.subscribe;
   mockPublisher.subscribe.subscribe = function() {
     return function(next) {
-      next(new Error('This happened'));
+      next('This happened');
     };
   };
 
@@ -38,7 +38,7 @@ test('lib/subscribe/subscribe:fails', function(assert) {
 
   subSub.on('error', function(err) {
     mockPublisher.subscribe.subscribe = oldSub;
-    assert.equal(err.message, 'This happened');
+    assert.equal(err.message, 'Not valid json: This happened');
     assert.end();
   });
 });

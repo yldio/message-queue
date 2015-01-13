@@ -1,0 +1,29 @@
+{
+  "host": "localhost",
+  "port": 5672,
+  "user": "guest",
+  "password": "guest",
+  "vhost": "",
+  "ssl": false,
+  "socketOptions": {
+    "connectionTimeout": 30,
+    "noDelay": true
+  },
+  "ackMessages": true,
+  "exchange": "message-queue",
+  "exchangeType": "topic",
+  "exchangeOptions": {
+    "durable": true
+  },
+  "queue": "",
+  "queueOptions": {
+    "autoDelete": true
+  },
+  "consumerOptions": {
+    "noAck": false,
+    "exclusive": false
+  },
+  "producerOptions": {
+    "persistent": true
+  }
+}
