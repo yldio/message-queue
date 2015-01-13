@@ -17,6 +17,24 @@ var sub;
 var channel;
 var channel = 'cats';
 
+test('amqp - set a bad exchange for the Publish', function(assert) {
+  pub = new adapter.Publish({exchange: null});
+  pub.on('error', function(err) {
+    assert.equal(err.message, 'Field \'exchange\' is the wrong type;' +
+      ' must be a string (up to 255 chars)');
+    pub.close(assert.end);
+  });
+});
+
+test('amqp - set a bad exchange for the Subscribe', function(assert) {
+  sub = new adapter.Subscribe({channel: 'cats', exchange: null});
+  sub.on('error', function(err) {
+    assert.equal(err.message, 'Field \'exchange\' is the wrong type;' +
+      ' must be a string (up to 255 chars)');
+    sub.close(assert.end);
+  });
+});
+
 test('create a subscribe and delete the queue', function(assert) {
   sub = new adapter.Subscribe({
     channel: channel,
