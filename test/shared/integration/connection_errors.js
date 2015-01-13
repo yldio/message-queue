@@ -61,7 +61,6 @@ adapters.forEach(function(adapterName) {
     } else {
       pub = new adapter.Publish();
       pub.on('error', cbForOnError(assert));
-      // lets restart rabbitmq :)
       pub.on('ready', cbForOnReady(adapterName, assert));
     }
   });
@@ -78,7 +77,6 @@ adapters.forEach(function(adapterName) {
     } else {
       sub = new adapter.Subscribe({channel: 'cats'});
       sub.on('error', cbForOnError(assert));
-      // lets restart rabbitmq :)
       sub.on('ready', cbForOnReady(adapterName, assert));
     }
   });
