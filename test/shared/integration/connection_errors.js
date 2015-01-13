@@ -62,6 +62,7 @@ adapters.forEach(function(adapterName) {
       pub = new adapter.Publish();
       pub.on('error', cbForOnError(assert));
       pub.on('ready', cbForOnReady(adapterName, assert));
+      pub.on('end', function() { assert.pass('Publish emitted `end`'); });
     }
   });
 

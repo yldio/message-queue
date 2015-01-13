@@ -14,8 +14,8 @@ var adapter = require('../../../lib')('amqp');
 
 var pub;
 var sub;
-var channel;
 var channel = 'cats';
+var virtualQueue = new Date().getTime().toString();
 
 test('amqp - set a bad exchange for the Publish', function(assert) {
   pub = new adapter.Publish({exchange: null});
@@ -58,14 +58,14 @@ test('create a subscribe and don\'t delete the queue and make it durable',
 function(assert) {
   sub = new adapter.Subscribe({
     channel: channel,
-    queue: 'felix_10',
+    queue: virtualQueue,
     queueOptions: {
       durable: true
     }
   });
   sub.on('error', assert.pass);
   sub.on('ready', function() {
-    assert.equal('felix_10', sub.cli.queue);
+    assert.equal(virtualQueue, sub.cli.queue);
     sub.close(assert.end);
   });
 });
@@ -74,7 +74,7 @@ test('try to create an existente queue and change one of the options',
 function(assert) {
   sub = new adapter.Subscribe({
     channel: 'loco',
-    queue: 'felix_10',
+    queue: virtualQueue,
     queueOptions: {
       autoDelete: true
     }
@@ -97,7 +97,7 @@ function(assert) {
   sub.on('error', assert.fail);
   sub.on('ready', function() {
     // get queue name
-    assert.ok(sub.cli.queue);
+    assert.pass('queue: ' + sub.cli.queue);
     assert.end();
   });
 });
