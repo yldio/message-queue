@@ -1,0 +1,21 @@
+{
+  "host": "localhost",
+  "port": 2181,
+  "path": "",
+  "partition": 0,
+  "clientId": "message-queue-kafka",
+  "zkOptions": {
+    "connectionString": "localhost:2181",
+    "sessionTimeout": 30000,
+    "spinDelay": 5000,
+    "retries": 10
+  },
+  "consumer": {
+    "groupId": "message-queue-kafka-group",
+    "autoCommitIntervalMs": 5000,
+    "fetchMaxWaitMs": 100,
+    "fetchMinBytes": 1,
+    "fetchMaxBytes": 10240,
+    "fromOffset": false
+  }
+}

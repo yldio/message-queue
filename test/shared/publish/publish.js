@@ -35,7 +35,9 @@ adapters.forEach(function(adapterName) {
   });
 
   test('should be able to write plain text', function(assert) {
+    debugger
     channel.publish('meow', function(err, info) {
+      debugger
       assert.equal(err, undefined);
       assert.ok(info.ack);
       assert.equal(typeof info.ts, 'object');

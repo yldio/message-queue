@@ -60,8 +60,8 @@ adapters.forEach(function(adapterName) {
       assert.end();
     } else {
       pub = new adapter.Publish();
-      pub.on('error', cbForOnError(assert));
       pub.on('ready', cbForOnReady(adapterName, assert));
+      pub.on('error', cbForOnError(assert));
       pub.on('end', function() { assert.pass('Publish emitted `end`'); });
     }
   });
@@ -77,8 +77,8 @@ adapters.forEach(function(adapterName) {
       assert.end();
     } else {
       sub = new adapter.Subscribe({channel: 'cats'});
-      sub.on('error', cbForOnError(assert));
       sub.on('ready', cbForOnReady(adapterName, assert));
+      sub.on('error', cbForOnError(assert));
     }
   });
 

@@ -14,6 +14,9 @@ adapters.forEach(function(adapterName) {
   var defaults  = adapter.Publish.defaults;
   var pub       = null;
 
+  var port = adapterName === 'kafka' ? 2181 : 
+    adapterName === 'amqp' ? 5672 : 6379;
+
   test('defaults should include host and port', function(assert) {
     assert.equal(typeof defaults, 'object');
     assert.ok(defaults.host);
@@ -22,15 +25,17 @@ adapters.forEach(function(adapterName) {
   });
 
   test('assumes default host and allow specifying port', function(assert) {
-    pub = new adapter.Publish({port: 5672});
+    debugger
+    pub = new adapter.Publish({port: port});
     pub.on('error', assert.fail);
     assert.ok(pub);
-    assert.equal(pub.port, 5672);
+    assert.equal(pub.port, port);
     assert.equal(pub.host, defaults.host);
     pub.close(assert.end);
   });
 
   test('assumes default port and allows specifying host', function(assert) {
+    debugger
     pub = new adapter.Publish({host: 'localhost'});
     pub.on('error', assert.fail);
     assert.equal(pub.port, +defaults.port);
@@ -39,17 +44,17 @@ adapters.forEach(function(adapterName) {
   });
 
   test('allows specifying both host and port', function(assert) {
-    pub = new adapter.Publish({host: 'localhost', port: 5672});
+    pub = new adapter.Publish({host: 'localhost', port: port});
     pub.on('error', assert.fail);
-    assert.equal(pub.port, 5672);
+    assert.equal(pub.port, port);
     assert.equal(pub.host, 'localhost');
     pub.close(assert.end);
   });
 
   test('can cast a string as port', function(assert) {
-    pub = new adapter.Publish({port: '5672'});
+    pub = new adapter.Publish({port: port.toString()});
     pub.on('error', assert.fail);
-    assert.equal(pub.port, 5672);
+    assert.equal(pub.port, port);
     assert.equal(pub.host, defaults.host);
     pub.close(assert.end);
   });
